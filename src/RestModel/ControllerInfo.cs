@@ -8,15 +8,15 @@ namespace RestModel
 {
     public class ControllerInfo
     {
-        public string NameSpace { get; set; }
-        public string ClassName { get; set; }
-        public Type ControllerType { get; set; }
-        public string ControllerName { get; set; }
-        public string RouteTemplate { get; set; }
-        public bool DefineAllowAnonymous { get; set; }
-        public bool DefineAuthorize { get; set; }
-        public Type[] Interfaces { get; set; }
+        public string NameSpace { get; init; }
+        public string ClassName { get; init; }
+        public Type ControllerType { get; init; }
+        public string ControllerName { get; init; }
+        public string RouteTemplate { get; init; }
+        public bool DefineAllowAnonymous { get; init; }
+        public bool DefineAuthorize { get; init; }
+        public Type[] Interfaces { get; init; }
 
-        public List<ActionInfo> Actions { get; set; }
+        public List<ActionInfo> Actions { get; init; }
     }
 }

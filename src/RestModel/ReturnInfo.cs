@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RestModel
 {
     public class ReturnInfo
     {
-        public Type ClrType { get; set; }
+        public Type ClrType { get; init; }
 
-        public Type ActionResultType { get; set; }
+        public Type ResultType { get; init; }
 
-        public Type EntityType { get; set; }
 
-        public bool IsValueTask { get; set; }
+        public bool IsValueTask { get; init; }
 
-        public bool IsTask { get; set; }
+        public bool IsTask { get; init; }
+
+        public bool IsActionResult => typeof(IActionResult).IsAssignableFrom(ResultType);
     }
 }

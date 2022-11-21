@@ -8,8 +8,8 @@ namespace RestModel
 {
     public class AppInfo
     {
-        public string AssemblyName { get; set; }
+        public string AssemblyName { get; init; }
 
-        public List<ControllerInfo> Controllers { get; set; }
+        public List<ControllerInfo> Controllers { get; init; }
     }
 }
