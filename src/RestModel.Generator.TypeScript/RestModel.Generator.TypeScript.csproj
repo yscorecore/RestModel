@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
+      <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
