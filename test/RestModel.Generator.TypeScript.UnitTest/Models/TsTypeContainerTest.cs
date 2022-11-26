@@ -5,7 +5,7 @@ using RestModel.Generator.TypeScript.Models;
 using RestModel.Generator.TypeScript.Models.Types;
 using Xunit;
 
-namespace RestModel.Generator.TypeScript.UnitTest
+namespace RestModel.Generator.TypeScript.UnitTest.Models
 {
     public class TsTypeContainerTest
     {
@@ -84,22 +84,22 @@ namespace RestModel.Generator.TypeScript.UnitTest
 
 
         [Theory]
-        [InlineData(typeof(bool[]), "Array<boolean>")]
-        [InlineData(typeof(ICollection<bool>), "Array<boolean>")]
-        [InlineData(typeof(ISet<bool>), "Array<boolean>")]
-        [InlineData(typeof(IList<bool>), "Array<boolean>")]
-        [InlineData(typeof(List<bool>), "Array<boolean>")]
-        [InlineData(typeof(IEnumerable<bool>), "Array<boolean>")]
-        [InlineData(typeof(IQueryable<bool>), "Array<boolean>")]
+        [InlineData(typeof(bool[]), "boolean[]")]
+        [InlineData(typeof(ICollection<bool>), "boolean[]")]
+        [InlineData(typeof(ISet<bool>), "boolean[]")]
+        [InlineData(typeof(IList<bool>), "boolean[]")]
+        [InlineData(typeof(List<bool>), "boolean[]")]
+        [InlineData(typeof(IEnumerable<bool>), "boolean[]")]
+        [InlineData(typeof(IQueryable<bool>), "boolean[]")]
         [InlineData(typeof(bool?[]), "Array<boolean | null>")]
-        [InlineData(typeof(double[]), "Array<number>")]
+        [InlineData(typeof(double[]), "number[]")]
         [InlineData(typeof(double?[]), "Array<number | null>")]
-        [InlineData(typeof(char[]), "Array<string>")]
-        [InlineData(typeof(DateTime[]), "Array<string>")]
-        [InlineData(typeof(DateTimeOffset[]), "Array<string>")]
-        [InlineData(typeof(string[]), "Array<string>")]
+        [InlineData(typeof(char[]), "string[]")]
+        [InlineData(typeof(DateTime[]), "string[]")]
+        [InlineData(typeof(DateTimeOffset[]), "string[]")]
+        [InlineData(typeof(string[]), "string[]")]
         [InlineData(typeof(Colors?[]), "Array<Colors | null>")]
-        [InlineData(typeof(Colors[]), "Array<Colors>")]
+        [InlineData(typeof(Colors[]), "Colors[]")]
         public void ShouldConvertArrayType(Type clrType, string expectedType)
         {
             var options = TsConvertOptions.Default;
@@ -113,7 +113,7 @@ namespace RestModel.Generator.TypeScript.UnitTest
         [InlineData(typeof(Dictionary<string, string>), "{ [key: string]: string; }")]
         [InlineData(typeof(ConcurrentDictionary<string, string>), "{ [key: string]: string; }")]
         [InlineData(typeof(IDictionary), "{ [key: any]: any; }")]
-        [InlineData(typeof(IDictionary<Colors, decimal[]>), "{ [key: Colors]: Array<number>; }")]
+        [InlineData(typeof(IDictionary<Colors, decimal[]>), "{ [key: Colors]: number[]; }")]
         public void ShouldConvertDictionaryType(Type clrType, string expectedType)
         {
             var options = TsConvertOptions.Default;
@@ -147,21 +147,70 @@ namespace RestModel.Generator.TypeScript.UnitTest
             tsType.Should().BeOfType(typeof(TsGenericDefinition));
             tsType.GetDisplayName(options).Should().Be(expectedType);
         }
+
+        [Theory]
+        [InlineData(typeof(Class1), "Class1")]
+        [InlineData(typeof(Class2), "Class2")]
+        [InlineData(typeof(Class3), "Class3")]
+        [InlineData(typeof(Struct4), "Struct4")]
+        public void ShouldConvertObjectType(Type clrType, string expectedType)
+        {
+            var options = TsConvertOptions.Default;
+            var container = new TsTypeContainer(options);
+            var tsType = container.FromClrType(clrType);
+            tsType.Should().BeOfType(typeof(TsObject));
+            tsType.GetDisplayName(options).Should().Be(expectedType);
+        }
+        [Fact]
+        public void ShouldConvertCircleRefrence()
+        {
+            var options = TsConvertOptions.Default;
+            var container = new TsTypeContainer(options);
+            container.RegisteClrType(typeof(Circle1));
+            container.RegisteClrType(typeof(Circle2));
+            container.GetAllMapping().Should().HaveCount(2);
+          
+        }
+
         public enum Colors
         {
             Red,
             Green,
             Blue
         }
-        public class Range<T>
+        public class Range<T> : Range2<T, T>
         {
-            public T Start { get; set; }
-            public T End { get; set; }
+
         }
-        public class Range2<T1,T2>
+        public class Range2<T1, T2>
         {
             public T1 Start { get; set; }
             public T2 End { get; set; }
+        }
+        public class Class1
+        {
+
+        }
+        public record Class2
+        {
+
+        }
+        public record Class3(string Name);
+
+        public struct Struct4
+        {
+
+        }
+
+        public class Circle1
+        {
+            public Circle1 Circle { get; set; }
+
+            public Circle2 Circle2 { get; set; }
+        }
+        public class Circle2
+        { 
+            public Circle1 Circle { get; set; }
         }
     }
 }

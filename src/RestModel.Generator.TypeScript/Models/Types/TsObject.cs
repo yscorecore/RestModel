@@ -1,6 +1,4 @@
-﻿using RestModel.Generator.TypeScript.Models;
-
-namespace RestModel.Generator.TypeScript.Models.Types
+﻿namespace RestModel.Generator.TypeScript.Models.Types
 {
     public class TsObject : ITsType
     {
@@ -40,6 +38,10 @@ namespace RestModel.Generator.TypeScript.Models.Types
         public string GetDisplayName(TsConvertOptions options)
         {
             return this.TypeName;
+        }
+        public bool HasBody(TsConvertOptions options)
+        {
+            return true;
         }
     }
 }

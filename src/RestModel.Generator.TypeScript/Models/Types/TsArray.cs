@@ -29,7 +29,14 @@
 
         public string GetDisplayName(TsConvertOptions options)
         {
-            return $"Array<{this.ItemType.GetDisplayName(options)}>";
+            if (this.ItemType is TsPrimitive || this.ItemType is TsAny || this.ItemType is TsEnum || this.ItemType is TsObject)
+            {
+                return $"{this.ItemType.GetDisplayName(options)}[]";
+            }
+            else
+            {
+                return $"Array<{this.ItemType.GetDisplayName(options)}>";
+            }
         }
 
         public void InitType(TsConvertContext tsConvert, Type clrType)
@@ -40,6 +47,10 @@
             {
                 return clrType.IsArray ? clrType.GetElementType() : clrType.GetGenericArguments().Single();
             }
+        }
+        public bool HasBody(TsConvertOptions options)
+        {
+            return false;
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RestModel.Generator.TypeScript.Models
+﻿namespace RestModel.Generator.TypeScript.Models
 {
     public interface ITsType
     {
@@ -15,5 +9,7 @@ namespace RestModel.Generator.TypeScript.Models
         void InitType(TsConvertContext tsConvert, Type clrType);
 
         string GetDisplayName(TsConvertOptions options);
+
+        bool HasBody(TsConvertOptions options);
     }
 }

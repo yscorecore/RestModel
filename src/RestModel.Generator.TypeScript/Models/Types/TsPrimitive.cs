@@ -50,6 +50,11 @@ namespace RestModel.Generator.TypeScript.Models.Types
             return this.Name;
         }
 
+        public bool HasBody(TsConvertOptions options)
+        {
+            return false;
+        }
+
         public void InitType(TsConvertContext tsConvert, Type clrType)
         {
             this.Name = TypeMappings[clrType];

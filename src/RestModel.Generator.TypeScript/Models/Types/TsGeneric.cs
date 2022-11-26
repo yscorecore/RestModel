@@ -29,5 +29,9 @@
             var genericDefinition = (TsGenericDefinition)this.GenericDefinitionType;
             return genericDefinition.TypeName + $"<{args}>";
         }
+        public bool HasBody(TsConvertOptions options)
+        {
+            return false;
+        }
     }
 }

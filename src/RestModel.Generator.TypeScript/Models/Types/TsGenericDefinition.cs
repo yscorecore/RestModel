@@ -46,5 +46,9 @@
             var args = string.Join(", ", this.GenericArguments.Select(p => p.GetDisplayName(options)));
             return $"{this.TypeName}<{args}>";
         }
+        public bool HasBody(TsConvertOptions options)
+        {
+            return true;
+        }
     }
 }

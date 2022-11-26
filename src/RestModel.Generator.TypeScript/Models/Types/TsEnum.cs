@@ -34,5 +34,10 @@ namespace RestModel.Generator.TypeScript.Models.Types
                 .Select(f => new TsEnumField(f.Name, tsType, Convert.ToInt64(f.GetValue(null))))
                 .ToList();
         }
+
+        public bool HasBody(TsConvertOptions options)
+        {
+            return true;
+        }
     }
 }

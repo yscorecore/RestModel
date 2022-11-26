@@ -49,6 +49,10 @@ namespace RestModel.Generator.TypeScript.Models.Types
             }
            
         }
+        public bool HasBody(TsConvertOptions options)
+        {
+            return false;
+        }
     }
 }
 

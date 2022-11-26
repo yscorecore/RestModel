@@ -28,5 +28,9 @@ namespace RestModel.Generator.TypeScript.Models.Types
             var itemCrlType = Nullable.GetUnderlyingType(clrType);
             this.ItemType = tsConvert.TypeFactory.FromClrType(itemCrlType);
         }
+        public bool HasBody(TsConvertOptions options)
+        {
+            return false;
+        }
     }
 }

@@ -21,5 +21,9 @@ namespace RestModel.Generator.TypeScript.Models.Types
         {
            this.PrimitiveType = "any";
         }
+        public bool HasBody(TsConvertOptions options)
+        {
+            return false;
+        }
     }
 }

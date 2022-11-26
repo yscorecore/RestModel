@@ -27,5 +27,9 @@ namespace RestModel.Generator.TypeScript.Models.Types
         {
             return this.Name;
         }
+        public bool HasBody(TsConvertOptions options)
+        {
+            return false;
+        }
     }
 }
