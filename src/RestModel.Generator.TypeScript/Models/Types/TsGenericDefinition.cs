@@ -21,7 +21,7 @@
         public void InitType(TsConvertContext tsConvert, Type clrType)
         {
             this.Namespace = clrType.Namespace;
-            this.TypeName = clrType.Name;
+            this.TypeName = clrType.Name.Substring(0, clrType.Name.IndexOf('`'));
             if (!IsRootType())
             {
                 this.Parent = tsConvert.TypeFactory.FromClrType(clrType.BaseType);
@@ -41,9 +41,9 @@
             }
         }
 
-        public string GetDisplayName(TsConvertContext tsConvert)
+        public string GetDisplayName(TsConvertOptions options)
         {
-            var args = string.Join(", ", this.GenericArguments.Select(p => p.GetDisplayName(tsConvert)));
+            var args = string.Join(", ", this.GenericArguments.Select(p => p.GetDisplayName(options)));
             return $"{this.TypeName}<{args}>";
         }
     }

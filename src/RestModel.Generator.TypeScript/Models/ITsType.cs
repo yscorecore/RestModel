@@ -14,6 +14,6 @@ namespace RestModel.Generator.TypeScript.Models
 
         void InitType(TsConvertContext tsConvert, Type clrType);
 
-        string GetDisplayName(TsConvertContext tsConvert);
+        string GetDisplayName(TsConvertOptions options);
     }
 }

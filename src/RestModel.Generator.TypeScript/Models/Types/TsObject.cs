@@ -1,6 +1,6 @@
 ﻿using RestModel.Generator.TypeScript.Models;
 
-namespace RestModel.Generator.TypeScript.Types
+namespace RestModel.Generator.TypeScript.Models.Types
 {
     public class TsObject : ITsType
     {
@@ -16,7 +16,7 @@ namespace RestModel.Generator.TypeScript.Types
 
         public static bool CanFromClrType(TsConvertContext tsConvert, Type clrType)
         {
-            return Type.GetTypeCode(clrType) == TypeCode.Object || clrType != typeof(object);
+            return Type.GetTypeCode(clrType) == TypeCode.Object && clrType != typeof(object);
         }
 
         public void InitType(TsConvertContext tsConvert, Type clrType)
@@ -37,7 +37,7 @@ namespace RestModel.Generator.TypeScript.Types
             }
         }
 
-        public string GetDisplayName(TsConvertContext tsConvert)
+        public string GetDisplayName(TsConvertOptions options)
         {
             return this.TypeName;
         }

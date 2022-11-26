@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using RestModel.Generator.TypeScript.Models;
 
-namespace RestModel.Generator.TypeScript.Types
+namespace RestModel.Generator.TypeScript.Models.Types
 {
     public class TsEnum : ITsType
     {
@@ -20,7 +20,7 @@ namespace RestModel.Generator.TypeScript.Types
             return clrType.IsEnum;
         }
 
-        public string GetDisplayName(TsConvertContext tsConvert)
+        public string GetDisplayName(TsConvertOptions options)
         {
             return this.Name;
         }

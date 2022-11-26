@@ -15,15 +15,21 @@
             }
             if (clrType.IsGenericType)
             {
-                return clrType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable<>));
+                var define = clrType.GetGenericTypeDefinition();
+                if (define == typeof(IEnumerable<>))
+                {
+                    return true;
+                }
+                var allInterfaces = define.GetInterfaces();
+                return allInterfaces.Any(p => p.IsGenericType && p.GetGenericTypeDefinition() == typeof(IEnumerable<>));
             }
             return false;
         }
 
 
-        public string GetDisplayName(TsConvertContext tsConvert)
+        public string GetDisplayName(TsConvertOptions options)
         {
-            return $"Array<{this.ItemType.GetDisplayName(tsConvert)}>";
+            return $"Array<{this.ItemType.GetDisplayName(options)}>";
         }
 
         public void InitType(TsConvertContext tsConvert, Type clrType)

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RestModel.Generator.TypeScript.Models;
 
-namespace RestModel.Generator.TypeScript.Types
+namespace RestModel.Generator.TypeScript.Models.Types
 {
     public class TsPrimitive : ITsType
     {
@@ -45,7 +45,7 @@ namespace RestModel.Generator.TypeScript.Types
             return TypeMappings.ContainsKey(clrType);
         }
 
-        public string GetDisplayName(TsConvertContext tsConvert)
+        public string GetDisplayName(TsConvertOptions options)
         {
             return this.Name;
         }

@@ -1,5 +1,4 @@
-﻿using RestModel.Generator.TypeScript.Types;
-
+﻿
 namespace RestModel.Generator.TypeScript.Models.Types
 {
     public class TsAny : ITsType
@@ -13,7 +12,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
             return true;
         }
 
-        public string GetDisplayName(TsConvertContext tsConvert)
+        public string GetDisplayName(TsConvertOptions options)
         {
             return this.PrimitiveType;
         }

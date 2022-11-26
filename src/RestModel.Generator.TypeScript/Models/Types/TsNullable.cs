@@ -18,9 +18,9 @@ namespace RestModel.Generator.TypeScript.Models.Types
             return Nullable.GetUnderlyingType(clrType) != null;
         }
 
-        public string GetDisplayName(TsConvertContext tsConvert)
+        public string GetDisplayName(TsConvertOptions options)
         {
-            return $"{this.ItemType.GetDisplayName(tsConvert)} | null";
+            return $"{this.ItemType.GetDisplayName(options)} | null";
         }
 
         public void InitType(TsConvertContext tsConvert, Type clrType)

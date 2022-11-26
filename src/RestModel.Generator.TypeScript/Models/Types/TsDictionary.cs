@@ -1,6 +1,8 @@
-﻿namespace RestModel.Generator.TypeScript.Models.Types
+﻿using System.Collections;
+
+namespace RestModel.Generator.TypeScript.Models.Types
 {
-    internal class TsDictionary : ITsType
+    public class TsDictionary : ITsType
     {
         public static int Priority => 300;
 
@@ -12,21 +14,40 @@
         {
             if (clrType.IsGenericType)
             {
-                return clrType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IDictionary<,>));
+                var define = clrType.GetGenericTypeDefinition();
+                if (define == typeof(IDictionary<,>))
+                {
+                    return true;
+                }
+                var allInterfaces = define.GetInterfaces();
+                return allInterfaces.Any(p => p.IsGenericType && p.GetGenericTypeDefinition() == typeof(IDictionary<,>));
+            }
+            else if(typeof(IDictionary).IsAssignableFrom(clrType))
+            {
+                return true;
             }
             return false;
         }
 
-        public string GetDisplayName(TsConvertContext tsConvert)
+        public string GetDisplayName(TsConvertOptions options)
         {
-            return $"{{ [key: {KeyType.GetDisplayName(tsConvert)}]: {ValueType.GetDisplayName(tsConvert)}; }}";
+            return $"{{ [key: {KeyType.GetDisplayName(options)}]: {ValueType.GetDisplayName(options)}; }}";
         }
 
         public void InitType(TsConvertContext tsConvert, Type clrType)
         {
-            var types = clrType.GetGenericArguments();
-            this.KeyType = tsConvert.TypeFactory.FromClrType(types[0]);
-            this.ValueType = tsConvert.TypeFactory.FromClrType(types[1]);
+            if (clrType.IsGenericType)
+            {
+                var types = clrType.GetGenericArguments();
+                this.KeyType = tsConvert.TypeFactory.FromClrType(types[0]);
+                this.ValueType = tsConvert.TypeFactory.FromClrType(types[1]);
+            }
+            else
+            {
+                this.KeyType = tsConvert.TypeFactory.FromClrType(typeof(object));
+                this.ValueType = tsConvert.TypeFactory.FromClrType(typeof(object));
+            }
+           
         }
     }
 }
