@@ -8,13 +8,12 @@ namespace RestModel.Generator.TypeScript.Models
 {
     public interface ITsType
     {
-        static abstract ITsType FromClrType(TsConvertContext tsConvert);
-        static abstract bool CanFromClrType(TsConvertContext tsConvert);
-
+        static abstract bool CanFromClrType(TsConvertContext tsConvert, Type clrType);
         static abstract int Priority { get; }
+        Type ClrType { get; set; }
 
-        string IdentityName { get; }
-        string DisplayName { get; }
+        void InitType(TsConvertContext tsConvert, Type clrType);
 
+        string GetDisplayName(TsConvertContext tsConvert);
     }
 }

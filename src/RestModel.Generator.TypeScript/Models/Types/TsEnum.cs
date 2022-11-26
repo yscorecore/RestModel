@@ -1,29 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using RestModel.Generator.TypeScript.Models;
 
 namespace RestModel.Generator.TypeScript.Types
 {
     public class TsEnum : ITsType
     {
-        public static int Priority { get; }
-        public string DisplayName { get; }
-        public string IdentityName { get; }
+        public static int Priority => 200;
 
-      
-        public List<TsEnumField> Fields { get; init; }
+        public Type ClrType { get; set; }
 
-        public static bool CanFromClrType(TsConvertContext tsConvert)
+        public List<TsEnumField> Fields { get; private set; }
+
+        public string Name { get; private set; }
+
+        public string Namespace { get; private set; }
+
+        public static bool CanFromClrType(TsConvertContext tsConvert, Type clrType)
         {
-            return tsConvert.ClrType.IsEnum;
+            return clrType.IsEnum;
         }
 
-        public static ITsType FromClrType(TsConvertContext tsConvert)
+        public string GetDisplayName(TsConvertContext tsConvert)
         {
-            throw new NotImplementedException();
+            return this.Name;
+        }
+
+        public void InitType(TsConvertContext tsConvert, Type clrType)
+        {
+            this.Name = clrType.Name;
+            this.Namespace = clrType.Namespace;
+            var tsType = tsConvert.TypeFactory.FromClrType(Enum.GetUnderlyingType(clrType));
+            this.Fields = clrType.GetFields(BindingFlags.Static | BindingFlags.Public)
+                .Select(f => new TsEnumField(f.Name, tsType, Convert.ToInt64(f.GetValue(null))))
+                .ToList();
         }
     }
 }

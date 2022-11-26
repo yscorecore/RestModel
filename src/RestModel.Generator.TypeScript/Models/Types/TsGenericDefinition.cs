@@ -1,22 +1,21 @@
-﻿using RestModel.Generator.TypeScript.Models;
-
-namespace RestModel.Generator.TypeScript.Types
+﻿namespace RestModel.Generator.TypeScript.Models.Types
 {
-    public class TsObject : ITsType
+    public class TsGenericDefinition : ITsType
     {
-        public static int Priority => 10000;
+        public static int Priority => 2000;
         public Type ClrType { get; set; }
+
         public ITsType Parent { get; private set; }
         public List<TsField> Fields { get; private set; }
+        public List<ITsType> GenericArguments { get; private set; }
 
         public string TypeName { get; private set; }
 
         public string Namespace { get; private set; }
 
-
         public static bool CanFromClrType(TsConvertContext tsConvert, Type clrType)
         {
-            return Type.GetTypeCode(clrType) == TypeCode.Object || clrType != typeof(object);
+            return clrType.IsGenericTypeDefinition;
         }
 
         public void InitType(TsConvertContext tsConvert, Type clrType)
@@ -27,9 +26,14 @@ namespace RestModel.Generator.TypeScript.Types
             {
                 this.Parent = tsConvert.TypeFactory.FromClrType(clrType.BaseType);
             }
-            this.Fields = clrType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-                .Select(p => new TsField(p.Name, tsConvert.TypeFactory.FromClrType(p.PropertyType)))
+
+            this.GenericArguments = clrType.GetGenericArguments()
+                .Select(tsConvert.TypeFactory.FromClrType)
                 .ToList();
+
+            this.Fields = clrType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+             .Select(p => new TsField(p.Name, tsConvert.TypeFactory.FromClrType(p.PropertyType)))
+             .ToList();
 
             bool IsRootType()
             {
@@ -39,7 +43,8 @@ namespace RestModel.Generator.TypeScript.Types
 
         public string GetDisplayName(TsConvertContext tsConvert)
         {
-            return this.TypeName;
+            var args = string.Join(", ", this.GenericArguments.Select(p => p.GetDisplayName(tsConvert)));
+            return $"{this.TypeName}<{args}>";
         }
     }
 }

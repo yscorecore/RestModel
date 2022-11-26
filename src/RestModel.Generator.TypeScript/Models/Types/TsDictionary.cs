@@ -1,35 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RestModel.Generator.TypeScript.Models.Types
+﻿namespace RestModel.Generator.TypeScript.Models.Types
 {
     internal class TsDictionary : ITsType
     {
         public static int Priority => 300;
-        public string IdentityName { get; init; }
-        public string DisplayName { get; init; }
 
-        public ITsType KeyType { get; init; }
-        public ITsType ValueType { get; init; }
+        public Type ClrType { get; set; }
+        public ITsType KeyType { get; private set; }
+        public ITsType ValueType { get; private set; }
 
-        public static bool CanFromClrType(TsConvertContext tsConvert!!)
+        public static bool CanFromClrType(TsConvertContext tsConvert!!, Type clrType)
         {
-            return typeof(IDictionary<,>).IsAssignableFrom(tsConvert.ClrType);
+            if (clrType.IsGenericType)
+            {
+                return clrType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IDictionary<,>));
+            }
+            return false;
         }
 
-        public static ITsType FromClrType(TsConvertContext tsConvert!!)
+        public string GetDisplayName(TsConvertContext tsConvert)
         {
-            var itemCrlType = Nullable.GetUnderlyingType(tsConvert.ClrType);
-            var subItem = tsConvert.TypeFactory.FromClrType(itemCrlType);
-            return new TsNullable
-            {
-                IdentityName = tsConvert.ClrType.FullName,
-                DisplayName = $"Array<{subItem.DisplayName}>",
-                ItemType = subItem,
-            };
+            return $"{{ [key: {KeyType.GetDisplayName(tsConvert)}]: {ValueType.GetDisplayName(tsConvert)}; }}";
+        }
+
+        public void InitType(TsConvertContext tsConvert, Type clrType)
+        {
+            var types = clrType.GetGenericArguments();
+            this.KeyType = tsConvert.TypeFactory.FromClrType(types[0]);
+            this.ValueType = tsConvert.TypeFactory.FromClrType(types[1]);
         }
     }
 }

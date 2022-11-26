@@ -4,26 +4,23 @@ namespace RestModel.Generator.TypeScript.Models.Types
 {
     public class TsAny : ITsType
     {
-        public static readonly TsPrimitive AnyType = new()
-        {
-            DisplayName = "any",
-            IdentityName = "#any",
-            PrimitiveType = "any"
-        };
-
         public static int Priority => 1000000;
-        public string DisplayName { get; init; }
-        public string IdentityName { get; init; }
-        public string PrimitiveType { get; init; }
+        public string PrimitiveType { get; private set; }
+        public Type ClrType { get; set; }
 
-        public static bool CanFromClrType(TsConvertContext tsConvert!!)
+        public static bool CanFromClrType(TsConvertContext tsConvert!!, Type clrType!!)
         {
             return true;
         }
 
-        public static ITsType FromClrType(TsConvertContext tsConvert!!)
+        public string GetDisplayName(TsConvertContext tsConvert)
         {
-            return AnyType;
+            return this.PrimitiveType;
+        }
+
+        public void InitType(TsConvertContext tsConvert!!, Type clrType!!)
+        {
+           this.PrimitiveType = "any";
         }
     }
 }

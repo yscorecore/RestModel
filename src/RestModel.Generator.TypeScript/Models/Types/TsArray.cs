@@ -1,43 +1,35 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RestModel.Generator.TypeScript.Models.Types
+﻿namespace RestModel.Generator.TypeScript.Models.Types
 {
     public class TsArray : ITsType
     {
         public static int Priority => 400;
-        public string IdentityName { get; init; }
-        public string DisplayName { get; init; }
 
-        public ITsType ItemType { get; init; }
+        public Type ClrType { get; set; }
+        public ITsType ItemType { get; private set; }
 
-        public static bool CanFromClrType(TsConvertContext tsConvert!!)
+        public static bool CanFromClrType(TsConvertContext tsConvert!!, Type clrType)
         {
-            if (tsConvert.ClrType.IsArray)
+            if (clrType.IsArray)
             {
                 return true;
             }
-            if (tsConvert.ClrType.IsGenericType)
+            if (clrType.IsGenericType)
             {
-                return tsConvert.ClrType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable<>));
+                return clrType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable<>));
             }
             return false;
         }
 
-        public static ITsType FromClrType(TsConvertContext tsConvert!!)
+
+        public string GetDisplayName(TsConvertContext tsConvert)
         {
-            var itemCrlType = GetItemType(tsConvert.ClrType);
-            var subItem = tsConvert.TypeFactory.FromClrType(itemCrlType);
-            return new TsArray
-            {
-                IdentityName = tsConvert.ClrType.FullName,
-                DisplayName = $"Array<{subItem.DisplayName}>",
-                ItemType = subItem,
-            };
+            return $"Array<{this.ItemType.GetDisplayName(tsConvert)}>";
+        }
+
+        public void InitType(TsConvertContext tsConvert, Type clrType)
+        {
+            var itemCrlType = GetItemType(clrType);
+            this.ItemType = tsConvert.TypeFactory.FromClrType(itemCrlType);
             Type GetItemType(Type clrType)
             {
                 return clrType.IsArray ? clrType.GetElementType() : clrType.GetGenericArguments().Single();

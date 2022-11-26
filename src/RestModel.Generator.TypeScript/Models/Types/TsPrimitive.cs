@@ -36,53 +36,23 @@ namespace RestModel.Generator.TypeScript.Types
                 [typeof(DBNull)] = "null",
             };
 
-        public static readonly TsPrimitive StringType = new()
-        {
-            DisplayName = "string",
-            IdentityName = "#string",
-            PrimitiveType = "string"
-        };
-        public static readonly TsPrimitive NumberType = new()
-        {
-            DisplayName = "number",
-            IdentityName = "#number",
-            PrimitiveType = "number"
-        };
-        public static readonly TsPrimitive BooleanType = new()
-        {
-            DisplayName = "boolean",
-            IdentityName = "#boolean",
-            PrimitiveType = "boolean"
-        };
-        public static readonly TsPrimitive NullType = new()
-        {
-            DisplayName = "null",
-            IdentityName = "#null",
-            PrimitiveType = "null"
-        };
-
         public static int Priority => 100;
-        public string DisplayName { get; init; }
-        public string IdentityName { get; init; }
-        public string PrimitiveType { get; init; }
+        public string Name { get; private set; }
+        public Type ClrType { get; set; }
 
-        public static bool CanFromClrType(TsConvertContext tsConvert!!)
+        public static bool CanFromClrType(TsConvertContext tsConvert!!, Type clrType)
         {
-            return TypeMappings.ContainsKey(tsConvert.ClrType);
+            return TypeMappings.ContainsKey(clrType);
         }
 
-        public static ITsType FromClrType(TsConvertContext tsConvert!!)
+        public string GetDisplayName(TsConvertContext tsConvert)
         {
-            return TypeMappings[tsConvert.ClrType] switch
-            {
-                "string" => StringType,
-                "number" => NumberType,
-                "boolean" => BooleanType,
-                "null" => NullType,
-                _ => throw new Exception("can not go here.")
-            };
+            return this.Name;
         }
 
-
+        public void InitType(TsConvertContext tsConvert, Type clrType)
+        {
+            this.Name = TypeMappings[clrType];
+        }
     }
 }
