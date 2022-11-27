@@ -27,6 +27,7 @@
                 [typeof(DateOnly)] = "string",
                 [typeof(TimeOnly)] = "string",
                 [typeof(DBNull)] = "null",
+                [typeof(void)] = "void",
             };
 
         public static int Priority => 100;

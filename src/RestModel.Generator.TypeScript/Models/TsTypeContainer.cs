@@ -24,7 +24,7 @@ namespace RestModel.Generator.TypeScript.Models
         }
         public TsConvertOptions Options { get; }
         private TsConvertContext Context { get; }
-        public ConcurrentDictionary<Type, ITsType> TypeMapping { get; } = new ConcurrentDictionary<Type, ITsType>();
+        public Dictionary<Type, ITsType> TypeMapping { get; } = new Dictionary<Type, ITsType>();
 
 
 

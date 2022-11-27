@@ -4,6 +4,7 @@ using FluentAssertions;
 using RestModel.Generator.TypeScript.Models;
 using RestModel.Generator.TypeScript.Models.Types;
 using Xunit;
+using Microsoft.AspNetCore.Http;
 
 namespace RestModel.Generator.TypeScript.UnitTest.Models
 {
@@ -32,6 +33,7 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         [InlineData(typeof(float), "number")]
         [InlineData(typeof(double), "number")]
         [InlineData(typeof(decimal), "number")]
+        [InlineData(typeof(void), "void")]
         public void ShouldConvertPrimitiveType(Type clrType, string expectedType)
         {
             var options = TsConvertOptions.Default;
@@ -39,7 +41,19 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
             var tsType = container.FromClrType(clrType);
             tsType.Should().BeOfType(typeof(TsPrimitive));
             tsType.GetDisplayName(options).Should().Be(expectedType);
+        }
 
+
+        [Theory]
+        [InlineData(typeof(IFormFile), "File")]
+        [InlineData(typeof(MyFormFile), "File")]
+        public void ShouldConvertFormFileType(Type clrType, string expectedType)
+        {
+            var options = TsConvertOptions.Default;
+            var container = new TsTypeContainer(options);
+            var tsType = container.FromClrType(clrType);
+            tsType.Should().BeOfType(typeof(TsFormFile));
+            tsType.GetDisplayName(options).Should().Be(expectedType);
         }
         [Theory]
         [InlineData(typeof(object), "any")]
@@ -217,6 +231,30 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         public class Circle2
         { 
             public Circle1 Circle { get; set; }
+        }
+        public class MyFormFile : IFormFile
+        {
+            public string ContentType { get; }
+            public string ContentDisposition { get; }
+            public IHeaderDictionary Headers { get; }
+            public long Length { get; }
+            public string Name { get; }
+            public string FileName { get; }
+
+            public void CopyTo(Stream target)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task CopyToAsync(Stream target, CancellationToken cancellationToken = default)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Stream OpenReadStream()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

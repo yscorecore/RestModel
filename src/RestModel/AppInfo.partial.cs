@@ -5,29 +5,28 @@ using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace RestModel
 {
-    public class AppInfoFactory
+    public partial class AppInfo
     {
-        public AppInfo FromAssembly(Assembly assembly)
+        public static AppInfo FromAssembly(IEnumerable<Assembly> assemblies)
         {
             return new AppInfo
             {
-                AssemblyName = assembly.FullName,
-                Controllers = FindControllerTypes(assembly).Select(FromControllerType).ToList()
+                Controllers = assemblies.SelectMany(p => FindControllerTypes(p)).Select(FromControllerType).ToList()
             };
         }
 
-        private IEnumerable<Type> FindControllerTypes(Assembly assembly)
+        private static IEnumerable<Type> FindControllerTypes(Assembly assembly)
         {
             return assembly.GetTypes()
                 .Where(p => !p.IsAbstract && typeof(ControllerBase).IsAssignableFrom(p))
                 .Where(p => Attribute.IsDefined(p, typeof(ControllerAttribute), true));
         }
-        public ControllerInfo FromControllerType(Type type)
+        private static ControllerInfo FromControllerType(Type type)
         {
             return new ControllerInfo
             {
                 ClassName = type.Name,
-                ControllerName = type.Name.EndsWith("Controller") ? type.Name[..-10] : type.Name,
+                ControllerName = type.Name.EndsWith("Controller") ? type.Name[..^10] : type.Name,
                 ControllerType = type,
                 NameSpace = type.Namespace,
                 DefineAllowAnonymous = Attribute.IsDefined(type, typeof(AllowAnonymousAttribute), true),
@@ -37,11 +36,11 @@ namespace RestModel
                 Actions = FindActionMethods(type).Select(FromActionMethod).ToList()
             };
         }
-        private IEnumerable<MethodInfo> FindActionMethods(Type controller)
+        private static IEnumerable<MethodInfo> FindActionMethods(Type controller)
         {
             return controller.GetMethods().Where(p => Attribute.IsDefined(p, typeof(HttpMethodAttribute), true));
         }
-        public ActionInfo FromActionMethod(MethodInfo action)
+        private static ActionInfo FromActionMethod(MethodInfo action)
         {
             var method = action.GetCustomAttribute<HttpMethodAttribute>(true);
             var route = action.GetCustomAttribute<RouteAttribute>(true);
@@ -55,21 +54,23 @@ namespace RestModel
                 Arguments = action.GetParameters().Select(FromParameter).ToList()
             };
         }
-        private ReturnInfo CreateReturnInfo(MethodInfo action)
+        private static ReturnInfo CreateReturnInfo(MethodInfo action)
         {
             var returnType = action.ReturnType;
             var isGeneric = returnType.IsGenericType;
             var isTaskGenericOrValueTaskGeneric = isGeneric && (
                 returnType.GetGenericTypeDefinition() == typeof(Task<>) || returnType.GetGenericTypeDefinition() == typeof(ValueTask<>));
+            var isTaskOrValueTask = returnType == typeof(Task) || returnType == typeof(ValueTask);
+            var resultType = isTaskOrValueTask ? typeof(void) : isTaskGenericOrValueTaskGeneric ? returnType.GetGenericArguments().First() : returnType;
             return new ReturnInfo
             {
                 ClrType = returnType,
                 IsTask = typeof(Task).IsAssignableFrom(returnType),
                 IsValueTask = returnType == typeof(ValueTask) || (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(ValueTask<>)),
-                ResultType = isTaskGenericOrValueTaskGeneric ? returnType.GetGenericArguments().First() : returnType
+                ResultType = resultType
             };
         }
-        private ArgumentInfo FromParameter(ParameterInfo parameter)
+        private static ArgumentInfo FromParameter(ParameterInfo parameter)
         {
             var (name, source) = GetValueInfo();
             return new ArgumentInfo
