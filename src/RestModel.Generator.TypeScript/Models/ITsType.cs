@@ -11,5 +11,7 @@
         string GetDisplayName(TsConvertOptions options);
 
         bool HasBody(TsConvertOptions options);
+
+        void GenerateScript(TsGenerateContext context);
     }
 }

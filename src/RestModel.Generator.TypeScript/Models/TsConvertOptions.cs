@@ -2,6 +2,10 @@
 {
     public record TsConvertOptions
     {
+        public bool EnumAsString { get; set; } = false;
+        public string IndentText { get; set; } = "    ";
+        public bool CamelCaseProperty { get; set; } = true;
+
         public static readonly TsConvertOptions Default = new TsConvertOptions();
     }
 }

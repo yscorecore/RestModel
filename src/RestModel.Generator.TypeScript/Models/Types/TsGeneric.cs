@@ -33,5 +33,10 @@
         {
             return false;
         }
+
+        public void GenerateScript(TsGenerateContext context)
+        {
+           
+        }
     }
 }

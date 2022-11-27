@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RestModel.Generator.TypeScript.Models;
-
-namespace RestModel.Generator.TypeScript.Models.Types
+﻿namespace RestModel.Generator.TypeScript.Models.Types
 {
     public class TsPrimitive : ITsType
     {
@@ -43,6 +36,11 @@ namespace RestModel.Generator.TypeScript.Models.Types
         public static bool CanFromClrType(TsConvertContext tsConvert!!, Type clrType)
         {
             return TypeMappings.ContainsKey(clrType);
+        }
+
+        public void GenerateScript(TsGenerateContext context)
+        {
+            
         }
 
         public string GetDisplayName(TsConvertOptions options)

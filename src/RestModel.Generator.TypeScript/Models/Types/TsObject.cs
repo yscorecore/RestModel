@@ -26,6 +26,7 @@
                 this.Parent = tsConvert.TypeFactory.FromClrType(clrType.BaseType);
             }
             this.Fields = clrType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+                .Where(p=>p.DeclaringType == clrType)
                 .Select(p => new TsField(p.Name, tsConvert.TypeFactory.FromClrType(p.PropertyType)))
                 .ToList();
 
@@ -42,6 +43,18 @@
         public bool HasBody(TsConvertOptions options)
         {
             return true;
+        }
+
+        public void GenerateScript(TsGenerateContext context)
+        {
+            var camelCase = context.Options.CamelCaseProperty;
+            Func<string, string> convertFunc = camelCase ? a => a.ToCamelCaseName() : (a) => a;
+            var title = Parent is null ?
+                $"export interface {TypeName}"
+                : $"export interface {TypeName} extends {Parent.GetDisplayName(context.Options)}";
+            var contents = Fields.Select(item => $"{convertFunc(item.Name)}: {item.Type.GetDisplayName(context.Options)};");
+
+            context.WriteBlock(title, contents);
         }
     }
 }

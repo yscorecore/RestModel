@@ -53,6 +53,11 @@ namespace RestModel.Generator.TypeScript.Models.Types
         {
             return false;
         }
+
+        public void GenerateScript(TsGenerateContext context)
+        {
+           
+        }
     }
 }
 

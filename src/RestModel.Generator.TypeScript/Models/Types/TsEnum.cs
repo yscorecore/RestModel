@@ -39,5 +39,12 @@ namespace RestModel.Generator.TypeScript.Models.Types
         {
             return true;
         }
+
+        public void GenerateScript(TsGenerateContext context)
+        {
+            var title = $"export const enum {this.Name}";
+            var contents = this.Fields.Select(item => $"{item.Name} = {item.Value},");
+            context.WriteBlock(title, contents);
+        }
     }
 }

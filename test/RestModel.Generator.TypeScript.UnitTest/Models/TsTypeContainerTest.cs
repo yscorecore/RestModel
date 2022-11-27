@@ -127,7 +127,7 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         [InlineData(typeof(Range<string>), "Range<string>")]
         [InlineData(typeof(Range<decimal>), "Range<number>")]
         [InlineData(typeof(Range<DateTime>), "Range<string>")]
-        [InlineData(typeof(Range<Colors[]>), "Range<Array<Colors>>")]
+        [InlineData(typeof(Range<Colors[]>), "Range<Colors[]>")]
         public void ShouldConvertGenericType(Type clrType, string expectedType)
         {
             var options = TsConvertOptions.Default;
@@ -153,6 +153,7 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         [InlineData(typeof(Class2), "Class2")]
         [InlineData(typeof(Class3), "Class3")]
         [InlineData(typeof(Struct4), "Struct4")]
+        //[InlineData(typeof(Class5), "Class5")]
         public void ShouldConvertObjectType(Type clrType, string expectedType)
         {
             var options = TsConvertOptions.Default;
@@ -197,16 +198,21 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         }
         public record Class3(string Name);
 
+        
+
         public struct Struct4
         {
 
         }
+        //public class Class5 : Dictionary<string, string>
+        //{
+        //    public string StrProp { get; set; }
+        //}
 
         public class Circle1
         {
             public Circle1 Circle { get; set; }
 
-            public Circle2 Circle2 { get; set; }
         }
         public class Circle2
         { 
