@@ -9,42 +9,33 @@ namespace RestModel.Generator.TypeScript.Client
         {
             var clientName = controllerInfo.ControllerName + "ApiClient";
             var title = $"class {clientName} extend {context.Options.BaseApiClassName}";
-            var contents = new List<string>();
-           
-           // contents.Add($"public {}(): Promise<{}> {")
+            var contents = actionInfos.SelectMany(p => GenerateApiBody(context.Options, controllerInfo, p, modelTypeMapper));
             context.WriteBlock(title, contents);
             context.Output.WriteLine();
             context.Output.WriteLine($"export {clientName.ToCamelCaseName()} = new {clientName}();");
             context.Output.WriteLine();
             return Task.CompletedTask;
         }
-        private string[] GenerateApiBody()
-        { 
-            var stringBuilder = new StringBuilder();
-
-            return stringBuilder.ToString().Split(new char[] { '\r','\n'})
+        private string[] GenerateApiBody(TsConvertOptions options, ControllerInfo controllerInfo, ActionInfo actionInfo, IDictionary<Type, ITsType> modelTypeMapper)
+        {
+            var returnType = modelTypeMapper[actionInfo.ReturnInfo.ResultType];
+            var actionName = actionInfo.ActionName;
+            var methodName = actionInfo.HttpMethod;
+            var arguments = string.Join(", ", actionInfo.Arguments.Select(p => $"{p.ParameterName}: {modelTypeMapper[p.ParameterType].GetDisplayName(options)}"));
+            return new string[]
+                {
+                    $"public {actionName}(req: UploadRequestReq): Promise<{returnType.GetDisplayName(options)}> {{",
+                    "    return send({",
+                    "      url:'/',",
+                    "      method:'{methodName}',",
+                    "      headers: { }",
+                    "      params: { },",
+                    "      body: req,",
+                    "      form: { }",
+                    "    });",
+                    "}",
+                    ""
+                };
         }
-        /*
-         * class RestModelApiClient extend ApiClientBase {
-         *  
-         *      public Upload(req: UploadRequestReq): Promise<UploadRequestRes> {
-         *          return send({
-         *            url:'/',  
-         *            method:'get'
-         *            headers: { },
-         *            params: {
-         *            },
-         *            body: req,
-         *            form: {}
-         *          });
-         *      } 
-         * }
-         * export restModelApi = new RestModelClient();
-         * 
-         * 
-         * 
-         * 
-         */
-
     }
 }
