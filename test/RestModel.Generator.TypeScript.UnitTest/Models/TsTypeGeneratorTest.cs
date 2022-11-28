@@ -82,7 +82,6 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         public class Circle
         {
             public Circle? Value { get; set; }
-            public Circle Value2 { get; set; }
         }
 
         public class Range<T> : Range2<T, T>

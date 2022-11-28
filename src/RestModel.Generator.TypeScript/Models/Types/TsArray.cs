@@ -7,7 +7,7 @@
         public Type ClrType { get; set; }
         public ITsType ItemType { get; private set; }
 
-        public static bool CanFromClrType(TsConvertContext tsConvert!!, Type clrType)
+        public static bool CanFromClrType(TsConvertContext tsConvert, Type clrType)
         {
             if (clrType.IsArray)
             {

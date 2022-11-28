@@ -30,6 +30,13 @@ namespace RestModel.Generator.TypeScript
         }
         private Task GenerateApiFile(GeneratorContext<TsConvertOptions> context, IEnumerable<ActionEntry> actionEntries, IDictionary<Type, ITsType> modelTypeMapper)
         {
+            using var apiFile = File.Create(Path.Combine(context.Output, context.Options.ApiFileName));
+            using var streamWriter = new StreamWriter(apiFile);
+            var tsGenerateContext = new TsGenerateContext
+            {
+                Output = streamWriter,
+                Options = context.Options
+            };
             return Task.CompletedTask;
         }
 

@@ -7,7 +7,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
         public string PrimitiveType { get; private set; }
         public Type ClrType { get; set; }
 
-        public static bool CanFromClrType(TsConvertContext tsConvert!!, Type clrType!!)
+        public static bool CanFromClrType(TsConvertContext tsConvert, Type clrType)
         {
             return true;
         }
@@ -17,7 +17,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
             return this.PrimitiveType;
         }
 
-        public void InitType(TsConvertContext tsConvert!!, Type clrType!!)
+        public void InitType(TsConvertContext tsConvert, Type clrType)
         {
            this.PrimitiveType = "any";
         }

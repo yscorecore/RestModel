@@ -13,7 +13,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
         public Type ClrType { get; set; }
         public ITsType ItemType { get; private set; }
 
-        public static bool CanFromClrType(TsConvertContext tsConvert!!, Type clrType!!)
+        public static bool CanFromClrType(TsConvertContext tsConvert, Type clrType)
         {
             return Nullable.GetUnderlyingType(clrType) != null;
         }

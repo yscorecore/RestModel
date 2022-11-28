@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using RestModel.Generator.TypeScript.Models;
 
 namespace RestModel.Generator.TypeScript.Models.Types
 {

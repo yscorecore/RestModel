@@ -2,8 +2,8 @@
 {
     public interface ITsType
     {
-        static abstract bool CanFromClrType(TsConvertContext tsConvert, Type clrType);
-        static abstract int Priority { get; }
+        //static abstract bool CanFromClrType(TsConvertContext tsConvert, Type clrType);
+        //static abstract int Priority { get; }
         Type ClrType { get; set; }
 
         void InitType(TsConvertContext tsConvert, Type clrType);

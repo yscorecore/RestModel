@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+
 namespace RestModel.Generator.TypeScript.Models.Types
 {
     public class TsFormFile : ITsType
@@ -6,7 +7,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
         public static int Priority => 0;
         public Type ClrType { get; set; }
 
-        public static bool CanFromClrType(TsConvertContext tsConvert!!, Type clrType!!)
+        public static bool CanFromClrType(TsConvertContext tsConvert, Type clrType)
         {
             return typeof(IFormFile).IsAssignableFrom(clrType);
         }
@@ -16,7 +17,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
             return "File";
         }
 
-        public void InitType(TsConvertContext tsConvert!!, Type clrType!!)
+        public void InitType(TsConvertContext tsConvert, Type clrType)
         {
 
         }

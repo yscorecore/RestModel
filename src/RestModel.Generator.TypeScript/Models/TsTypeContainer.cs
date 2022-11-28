@@ -8,7 +8,7 @@ namespace RestModel.Generator.TypeScript.Models
             .Assembly.GetTypes()
             .Where(p => p.IsClass && !p.IsAbstract && p.GetConstructor(Type.EmptyTypes) != null)
             .Where(p => typeof(ITsType).IsAssignableFrom(p))
-            .OrderBy(P => Convert.ToInt32(P.GetProperty(nameof(ITsType.Priority)).GetValue(null)))
+            .OrderBy(P => Convert.ToInt32(P.GetProperty("Priority").GetValue(null)))
             .Select(p => new SupportTypeInfo(p))
             .ToList();
 
@@ -70,7 +70,7 @@ namespace RestModel.Generator.TypeScript.Models
                 }
 
                 this.TsType = tsType;
-                var method = tsType.GetMethod(nameof(ITsType.CanFromClrType), System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+                var method = tsType.GetMethod("CanFromClrType", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
                 this.CanConvertFunc = method.CreateDelegate<Func<TsConvertContext, Type, bool>>();
 
             }
