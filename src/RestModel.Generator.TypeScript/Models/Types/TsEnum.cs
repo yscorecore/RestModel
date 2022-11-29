@@ -45,5 +45,13 @@ namespace RestModel.Generator.TypeScript.Models.Types
             var contents = this.Fields.Select(item => $"{item.Name} = {item.Value},");
             context.WriteBlock(title, contents);
         }
+        public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)
+        {
+            return new ITsType[] { this };
+        }
+        public string GetImportName(TsConvertOptions options)
+        {
+            return this.Name;
+        }
     }
 }

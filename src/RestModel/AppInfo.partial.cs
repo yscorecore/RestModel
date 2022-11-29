@@ -48,7 +48,7 @@ namespace RestModel
             {
                 MethodInfo = action,
                 ActionName = action.Name,
-                HttpMethod = method.Name,
+                HttpMethod = method.Name ?? method.HttpMethods.FirstOrDefault(),
                 RouteTemplate = route?.Template ?? method.Template,
                 ReturnInfo = CreateReturnInfo(action),
                 Arguments = action.GetParameters().Select(FromParameter).ToList()

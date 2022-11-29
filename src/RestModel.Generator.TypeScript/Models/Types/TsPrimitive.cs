@@ -58,5 +58,13 @@
         {
             this.Name = TypeMappings[clrType];
         }
+        public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)
+        {
+            return Enumerable.Empty<ITsType>();
+        }
+        public string GetImportName(TsConvertOptions options)
+        {
+            return null;
+        }
     }
 }

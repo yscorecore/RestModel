@@ -57,6 +57,14 @@
         {
            
         }
+        public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)
+        {
+            return this.ItemType.GetDeclareDependencyTypes(options);
+        }
+        public string GetImportName(TsConvertOptions options)
+        {
+            return null;
+        }
     }
 }
 

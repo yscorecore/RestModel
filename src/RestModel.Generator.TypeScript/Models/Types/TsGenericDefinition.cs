@@ -65,7 +65,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
                 }
                 else
                 {
-                    if (prop.PropertyType.IsValueType && Nullable.GetUnderlyingType(prop.PropertyType)!=null)
+                    if (prop.PropertyType.IsValueType && Nullable.GetUnderlyingType(prop.PropertyType) != null)
                     {
                         return PropertyAssignKind.Nullable;
                     }
@@ -73,28 +73,36 @@ namespace RestModel.Generator.TypeScript.Models.Types
 
                 return PropertyAssignKind.Unknown;
             }
-    }
+        }
 
-    public string GetDisplayName(TsConvertOptions options)
-    {
-        var args = string.Join(", ", this.GenericArguments.Select(p => p.GetDisplayName(options)));
-        return $"{this.TypeName}<{args}>";
-    }
-    public bool HasBody(TsConvertOptions options)
-    {
-        return true;
-    }
+        public string GetDisplayName(TsConvertOptions options)
+        {
+            var args = string.Join(", ", this.GenericArguments.Select(p => p.GetDisplayName(options)));
+            return $"{this.TypeName}<{args}>";
+        }
+        public bool HasBody(TsConvertOptions options)
+        {
+            return true;
+        }
 
-    public void GenerateScript(TsGenerateContext context)
-    {
-        var camelCase = context.Options.CamelCaseProperty;
-        Func<string, string> convertFunc = camelCase ? a => a.ToCamelCaseName() : (a) => a;
-        var title = Parent is null ?
-            $"export interface {GetDisplayName(context.Options)}"
-            : $"export interface {GetDisplayName(context.Options)} extends {Parent.GetDisplayName(context.Options)}";
-        var contents = Fields.Select(item => $"{convertFunc(item.Name)}: {item.Type.GetDisplayName(context.Options)};");
+        public void GenerateScript(TsGenerateContext context)
+        {
+            var camelCase = context.Options.CamelCaseProperty;
+            Func<string, string> convertFunc = camelCase ? a => a.ToCamelCaseName() : (a) => a;
+            var title = Parent is null ?
+                $"export interface {GetDisplayName(context.Options)}"
+                : $"export interface {GetDisplayName(context.Options)} extends {Parent.GetDisplayName(context.Options)}";
+            var contents = Fields.Select(item => $"{convertFunc(item.Name)}: {item.Type.GetDisplayName(context.Options)};");
 
-        context.WriteBlock(title, contents);
+            context.WriteBlock(title, contents);
+        }
+        public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)
+        {
+            return new ITsType[] { this };
+        }
+        public string GetImportName(TsConvertOptions options)
+        {
+            return this.TypeName;
+        }
     }
-}
 }

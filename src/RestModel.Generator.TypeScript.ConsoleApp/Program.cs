@@ -8,7 +8,7 @@ namespace RestModel.Generator.TypeScript.ConsoleApp
         {
             await Generator.Run<TypeScriptGenerator, TsConvertOptions>(new GeneratorInfo<TsConvertOptions>
             {
-                Input = @"E:\Repos\studentmeal\StudentMeal\StudentMeal.SchoolApi\bin\Debug\net6.0",
+                Input = @"C:\Users\yangpengbo\source\repos\obpt123\StudentMeal\StudentMeal\StudentMeal.SchoolApi\bin\Debug\net6.0",
                 ControllerDlls = new string[] { "StudentMeal.*.dll" },
                 Output = "output",
                 Options = new TsConvertOptions()

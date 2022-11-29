@@ -56,5 +56,14 @@
 
             context.WriteBlock(title, contents);
         }
+
+        public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)
+        {
+            return new ITsType[] { this };
+        }
+        public string GetImportName(TsConvertOptions options)
+        {
+            return this.TypeName;
+        }
     }
 }

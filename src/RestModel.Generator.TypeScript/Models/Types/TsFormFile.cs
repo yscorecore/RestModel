@@ -30,6 +30,15 @@ namespace RestModel.Generator.TypeScript.Models.Types
         {
 
         }
+
+        public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)
+        {
+            return Enumerable.Empty<ITsType>();
+        }
+        public string GetImportName(TsConvertOptions options)
+        {
+            return null;
+        }
     }
 }
 

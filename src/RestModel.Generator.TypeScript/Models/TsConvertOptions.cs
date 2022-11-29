@@ -8,7 +8,7 @@
         public string IndentText { get; set; } = "    ";
         public bool CamelCaseProperty { get; set; } = true;
         public string BaseApiClassName { get; set; } = "ApiClientBase";
-        public string BaseApiImportModelName { get; set; } = "./baseApi.ts";
+        public string BaseApiImportModelName { get; set; } = "./base";
 
         public static readonly TsConvertOptions Default = new TsConvertOptions();
     }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IO;
+using Microsoft.AspNetCore.Mvc;
+using RestModel.Generator.TypeScript.Client;
 using RestModel.Generator.TypeScript.Models;
 
 namespace RestModel.Generator.TypeScript
@@ -28,7 +30,7 @@ namespace RestModel.Generator.TypeScript
             }
             return Task.CompletedTask;
         }
-        private Task GenerateApiFile(GeneratorContext<TsConvertOptions> context, IEnumerable<ActionEntry> actionEntries, IDictionary<Type, ITsType> modelTypeMapper)
+        private async Task GenerateApiFile(GeneratorContext<TsConvertOptions> context, IEnumerable<ActionEntry> actionEntries, IDictionary<Type, ITsType> modelTypeMapper)
         {
             using var apiFile = File.Create(Path.Combine(context.Output, context.Options.ApiFileName));
             using var streamWriter = new StreamWriter(apiFile);
@@ -37,7 +39,29 @@ namespace RestModel.Generator.TypeScript
                 Output = streamWriter,
                 Options = context.Options
             };
-            return Task.CompletedTask;
+            var apiGenerator = new TsClientGenerator();
+
+            await GenerateImport();
+            foreach (var actionEntry in actionEntries.GroupBy(p => p.ControllerInfo))
+            {
+                await apiGenerator.GenerateClientFile(tsGenerateContext, actionEntry.Key, actionEntry.Select(p => p.ActionInfo), modelTypeMapper);
+            }
+            async Task GenerateImport()
+            {
+                await streamWriter.WriteLineAsync($"import {{ {context.Options.BaseApiClassName} }} from \"{context.Options.BaseApiImportModelName}\";");
+                foreach (var model in GetAllModelTypes())
+                {
+                    await streamWriter.WriteLineAsync($"import {{ {model.GetImportName(context.Options)} }} from \"./{Path.GetFileNameWithoutExtension(context.Options.ModelFileName)}\";");
+                }
+            }
+            IEnumerable<ITsType> GetAllModelTypes()
+            {
+                return actionEntries.SelectMany(p => p.ActionInfo.Arguments.Select(a => a.ParameterType).Union(new[] { p.ActionInfo.ReturnInfo.ResultType })
+                      .Distinct()
+                       .SelectMany(p => modelTypeMapper[p].GetDeclareDependencyTypes(context.Options)))
+                        .Distinct();
+            }
+
         }
 
         private IDictionary<Type, ITsType> BuildModelTypeMapper(IEnumerable<ActionEntry> actionEntries, TsConvertOptions options)

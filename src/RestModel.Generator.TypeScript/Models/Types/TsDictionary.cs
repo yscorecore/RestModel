@@ -22,7 +22,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
                 var allInterfaces = define.GetInterfaces();
                 return allInterfaces.Any(p => p.IsGenericType && p.GetGenericTypeDefinition() == typeof(IDictionary<,>));
             }
-            else if(typeof(IDictionary).IsAssignableFrom(clrType))
+            else if (typeof(IDictionary).IsAssignableFrom(clrType))
             {
                 return true;
             }
@@ -31,7 +31,22 @@ namespace RestModel.Generator.TypeScript.Models.Types
 
         public string GetDisplayName(TsConvertOptions options)
         {
-            return $"{{ [key: {KeyType.GetDisplayName(options)}]: {ValueType.GetDisplayName(options)}; }}";
+            //  { [key: MealKind]: number; } ts(1337)
+            // the key not support custom object
+            // 索引签名参数类型必须是 “string”、“number”、“symbol”或模板文本类型。
+            if (this.KeyType is TsPrimitive ts)
+            {
+                if (ts.Name == "string" || ts.Name == "number" || ts.Name == "symbol")
+                {
+                    return $"{{ [key: {ts.Name}]: {ValueType.GetDisplayName(options)}; }}";
+                }
+            }
+            else if (this.KeyType is TsEnum)
+            {
+                return $"{{ [key: string | number]: {ValueType.GetDisplayName(options)}; }}";
+            }
+            return "any";
+
         }
 
         public void InitType(TsConvertContext tsConvert, Type clrType)
@@ -47,7 +62,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
                 this.KeyType = tsConvert.TypeFactory.FromClrType(typeof(object));
                 this.ValueType = tsConvert.TypeFactory.FromClrType(typeof(object));
             }
-           
+
         }
         public bool HasBody(TsConvertOptions options)
         {
@@ -56,7 +71,27 @@ namespace RestModel.Generator.TypeScript.Models.Types
 
         public void GenerateScript(TsGenerateContext context)
         {
-           
+
+        }
+        public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)
+        {
+            if (this.KeyType is TsPrimitive ts)
+            {
+                if (ts.Name == "string" || ts.Name == "number" || ts.Name == "symbol")
+                {
+                    return this.ValueType.GetDeclareDependencyTypes(options);
+                }
+            }
+            else if (this.KeyType is TsEnum)
+            {
+                return this.ValueType.GetDeclareDependencyTypes(options);
+            }
+            return Enumerable.Empty<ITsType>();
+
+        }
+        public string GetImportName(TsConvertOptions options)
+        {
+            return null;
         }
     }
 }

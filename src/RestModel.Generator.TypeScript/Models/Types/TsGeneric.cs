@@ -38,5 +38,15 @@
         {
            
         }
+
+        public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)
+        {
+            return this.GenericDefinitionType.GetDeclareDependencyTypes(options)
+                .Union(this.GenericArguments.SelectMany(p => p.GetDeclareDependencyTypes(options)));
+        }
+        public string GetImportName(TsConvertOptions options)
+        {
+            return null;
+        }
     }
 }
