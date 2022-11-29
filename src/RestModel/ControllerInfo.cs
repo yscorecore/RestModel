@@ -9,6 +9,7 @@ namespace RestModel
     public class ControllerInfo
     {
         public string NameSpace { get; init; }
+        public string AreaName { get; init; }
         public string ClassName { get; init; }
         public Type ControllerType { get; init; }
         public string ControllerName { get; init; }

@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebProject1.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Area("aaa")]
+    [Route("[area]/abc/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -20,8 +21,8 @@ namespace WebProject1.Controllers
         }
 
         [HttpGet]
-        [Route("a")]
-        public IEnumerable<WeatherForecast> Get([FromBody] int a, [FromBody] int b)
+        [Route("aabbcc/{a:range(1,3)}_{b}/{d:int}")]
+        public IEnumerable<WeatherForecast> Get([FromRoute(Name ="b")]int a,  int b,string c)
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

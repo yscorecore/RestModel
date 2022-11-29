@@ -32,6 +32,7 @@ namespace RestModel
                 DefineAllowAnonymous = Attribute.IsDefined(type, typeof(AllowAnonymousAttribute), true),
                 DefineAuthorize = Attribute.IsDefined(type, typeof(AuthorizeAttribute), true),
                 Interfaces = type.GetInterfaces(),
+                AreaName = type.GetCustomAttribute<AreaAttribute>(true)?.RouteValue,
                 RouteTemplate = type.GetCustomAttribute<RouteAttribute>(true)?.Template,
                 Actions = FindActionMethods(type).Select(FromActionMethod).ToList()
             };
@@ -80,7 +81,7 @@ namespace RestModel
                 DefineAuthorize = Attribute.IsDefined(parameter, typeof(AuthorizeAttribute), true),
                 ParameterType = parameter.ParameterType,
                 ValueSource = source,
-                ValueName = string.IsNullOrEmpty(name) ? parameter.Name : name,
+                ValueName = name,
             };
             (string, ValueSource) GetValueInfo()
             {
