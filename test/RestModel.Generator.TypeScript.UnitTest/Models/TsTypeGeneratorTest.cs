@@ -8,44 +8,38 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
     public class TsTypeGeneratorTest
     {
         [Theory]
-//        [InlineData(typeof(string), "")]
-//        [InlineData(typeof(Guid), "")]
-//        [InlineData(typeof(DateTime), "")]
-//        [InlineData(typeof(DateTimeOffset), "")]
-//        [InlineData(typeof(double), "")]
-//        [InlineData(typeof(double?), "")]
-//        [InlineData(typeof(double[]), "")]
-//        [InlineData(typeof(Dictionary<string, string>), "")]
-//        [InlineData(typeof(Colors), @"export const enum Colors
-//{
-//    Red = 0,
-//    Green = 1,
-//    Blue = 2,
-//}")]
-//        [InlineData(typeof(Person), @"export interface Person
-//{
-//    name: string;
-//    age: number;
-//}")]
-//        [InlineData(typeof(Student), @"export interface Student extends Person
-//{
-//    school: string;
-//}")]
-        [InlineData(typeof(Circle), @"export interface Circle
-{
+        [InlineData(typeof(string), "")]
+        [InlineData(typeof(Guid), "")]
+        [InlineData(typeof(DateTime), "")]
+        [InlineData(typeof(DateTimeOffset), "")]
+        [InlineData(typeof(double), "")]
+        [InlineData(typeof(double?), "")]
+        [InlineData(typeof(double[]), "")]
+        [InlineData(typeof(Dictionary<string, string>), "")]
+        [InlineData(typeof(Colors), @"export const enum Colors {
+    Red = 0,
+    Green = 1,
+    Blue = 2,
+}")]
+        [InlineData(typeof(Person), @"export interface Person {
+    name: string;
+    age: number;
+}")]
+        [InlineData(typeof(Student), @"export interface Student extends Person {
+    school: string;
+}")]
+        [InlineData(typeof(Circle), @"export interface Circle {
     value: Circle;
 }")]
-//        [InlineData(typeof(Range<int>), @"")]
-//        [InlineData(typeof(Range2<int,int>), @"")]
-//        [InlineData(typeof(Range2<, >), @"export interface Range2<T1, T2>
-//{
-//    start: T1;
-//    end: T2;
-//}")]
-//        [InlineData(typeof(Range<>), @"export interface Range<T> extends Range2<T, T>
-//{
-//    middle: T;
-//}")]
+        [InlineData(typeof(Range<int>), @"")]
+        [InlineData(typeof(Range2<int, int>), @"")]
+        [InlineData(typeof(Range2<,>), @"export interface Range2<T1, T2> {
+    start: T1;
+    end: T2;
+}")]
+        [InlineData(typeof(Range<>), @"export interface Range<T> extends Range2<T, T> {
+    middle: T;
+}")]
         public void ToTypeScriptModelCode(Type type, string expected)
         {
             var options = TsConvertOptions.Default;

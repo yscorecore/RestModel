@@ -126,8 +126,11 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         [InlineData(typeof(IDictionary<string, string>), "{ [key: string]: string; }")]
         [InlineData(typeof(Dictionary<string, string>), "{ [key: string]: string; }")]
         [InlineData(typeof(ConcurrentDictionary<string, string>), "{ [key: string]: string; }")]
-        [InlineData(typeof(IDictionary), "{ [key: any]: any; }")]
-        [InlineData(typeof(IDictionary<Colors, decimal[]>), "{ [key: Colors]: number[]; }")]
+        [InlineData(typeof(IDictionary), "any")]
+        [InlineData(typeof(IDictionary<Colors, decimal[]>), "{ [key: string | number]: number[]; }")]
+        [InlineData(typeof(IDictionary<Class1, decimal[]>), "any")]
+        [InlineData(typeof(IDictionary<bool, decimal[]>), "any")]
+        [InlineData(typeof(IDictionary<int, decimal[]>), "{ [key: number]: number[]; }")]
         public void ShouldConvertDictionaryType(Type clrType, string expectedType)
         {
             var options = TsConvertOptions.Default;
