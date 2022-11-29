@@ -1,6 +1,6 @@
 ﻿namespace RestModel.Generator.TypeScript.Models
 {
-    public interface ITsTypeContainer
+    public interface ITsTypeContainer : INameManager
     {
         ITsType FromClrType(Type clrType);
         void RegisteClrType(Type clrType);

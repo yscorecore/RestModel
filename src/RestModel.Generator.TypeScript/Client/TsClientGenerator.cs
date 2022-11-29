@@ -7,9 +7,10 @@ namespace RestModel.Generator.TypeScript.Client
     {
         public Task GenerateClientFile(TsGenerateContext context, ControllerInfo controllerInfo, IEnumerable<ActionInfo> actionInfos, IDictionary<Type, ITsType> modelTypeMapper)
         {
+            var actionNameManager = new NameManager();
             var clientName = controllerInfo.ControllerName + "ApiClient";
             var title = $"class {clientName} extends {context.Options.BaseApiClassName}";
-            var contents = actionInfos.SelectMany(p => GenerateApiBody(context.Options, controllerInfo, p, modelTypeMapper)).Where(p => !string.IsNullOrEmpty(p));
+            var contents = actionInfos.SelectMany(p => GenerateApiBody(actionNameManager, context.Options, controllerInfo, p, modelTypeMapper)).Where(p => !string.IsNullOrEmpty(p));
             context.Output.WriteLine();
             context.WriteBlock(title, contents);
             context.Output.WriteLine();
@@ -17,10 +18,10 @@ namespace RestModel.Generator.TypeScript.Client
             context.Output.WriteLine();
             return Task.CompletedTask;
         }
-        private string[] GenerateApiBody(TsConvertOptions options, ControllerInfo controllerInfo, ActionInfo actionInfo, IDictionary<Type, ITsType> modelTypeMapper)
+        private string[] GenerateApiBody(NameManager nameManager, TsConvertOptions options, ControllerInfo controllerInfo, ActionInfo actionInfo, IDictionary<Type, ITsType> modelTypeMapper)
         {
             var returnType = modelTypeMapper[actionInfo.ReturnInfo.ResultType];
-            var actionName = actionInfo.ActionName;
+            var actionName = nameManager.Request(actionInfo.ActionName);
             var methodName = actionInfo.HttpMethod;
             var arguments = string.Join(", ", actionInfo.Arguments.Select(p => $"{p.ParameterName}: {modelTypeMapper[p.ParameterType].GetDisplayName(options)}"));
             var headerText = BuildHeaderContent();
@@ -28,7 +29,7 @@ namespace RestModel.Generator.TypeScript.Client
             var paramText = BuildParamsContent();
             var formText = BuildFormContent();
 
-           
+
             var url = "/";
             return new string[]
                 {
@@ -48,7 +49,7 @@ namespace RestModel.Generator.TypeScript.Client
             {
                 var items = actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Header)
                      .Select(p => p.ParameterName == p.ValueName ? p.ValueName : $"{p.ValueName}:{p.ParameterName}").ToList();
-                return items.Count > 0 ? WrapSegment(string.Join(", ",items)) : default;
+                return items.Count > 0 ? WrapSegment(string.Join(", ", items)) : default;
             }
             string BuildBodyContent()
             {

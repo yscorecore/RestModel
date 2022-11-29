@@ -24,7 +24,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
         public void InitType(TsConvertContext tsConvert, Type clrType)
         {
             this.Namespace = clrType.Namespace;
-            this.TypeName = clrType.Name.Substring(0, clrType.Name.IndexOf('`'));
+            this.TypeName = tsConvert.TypeFactory.Request(clrType.Name.Substring(0, clrType.Name.IndexOf('`')));
             if (!IsRootType())
             {
                 this.Parent = tsConvert.TypeFactory.FromClrType(clrType.BaseType);

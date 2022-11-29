@@ -26,7 +26,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
 
         public void InitType(TsConvertContext tsConvert, Type clrType)
         {
-            this.Name = clrType.Name;
+            this.Name = tsConvert.TypeFactory.Request(clrType.Name);
             this.Namespace = clrType.Namespace;
             var tsType = tsConvert.TypeFactory.FromClrType(Enum.GetUnderlyingType(clrType));
             this.Fields = clrType.GetFields(BindingFlags.Static | BindingFlags.Public)

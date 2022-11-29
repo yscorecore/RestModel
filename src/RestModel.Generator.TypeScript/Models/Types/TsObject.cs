@@ -20,7 +20,7 @@
         public void InitType(TsConvertContext tsConvert, Type clrType)
         {
             this.Namespace = clrType.Namespace;
-            this.TypeName = clrType.Name;
+            this.TypeName = tsConvert.TypeFactory.Request(clrType.Name);
             if (!IsRootType())
             {
                 this.Parent = tsConvert.TypeFactory.FromClrType(clrType.BaseType);

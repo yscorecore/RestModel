@@ -55,6 +55,7 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
             tsType.Should().BeOfType(typeof(TsFormFile));
             tsType.GetDisplayName(options).Should().Be(expectedType);
         }
+
         [Theory]
         [InlineData(typeof(object), "any")]
         public void ShouldConvertAnyType(Type clrType, string expectedType)
@@ -122,6 +123,7 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
             tsType.Should().BeOfType(typeof(TsArray));
             tsType.GetDisplayName(options).Should().Be(expectedType);
         }
+
         [Theory]
         [InlineData(typeof(IDictionary<string, string>), "{ [key: string]: string; }")]
         [InlineData(typeof(Dictionary<string, string>), "{ [key: string]: string; }")]
@@ -187,7 +189,24 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
             container.RegisteClrType(typeof(Circle1));
             container.RegisteClrType(typeof(Circle2));
             container.GetAllMapping().Should().HaveCount(2);
-          
+
+        }
+        [Fact]
+      
+        public void ShouldConvertDuplicateNameType()
+        {
+            var options = TsConvertOptions.Default;
+            var container = new TsTypeContainer(options);
+            var ts1Type = container.FromClrType(typeof(T1.Class1));
+            var ts2Type = container.FromClrType(typeof(T2.Class1));
+            var ts3Type = container.FromClrType(typeof(T3.Class1<>));
+            var ts4Type = container.FromClrType(typeof(T4.Class1<,>));
+            var ts5Type = container.FromClrType(typeof(T5.Class1));
+            ts1Type.GetImportName(options).Should().Be("Class1");
+            ts2Type.GetImportName(options).Should().Be("Class12");
+            ts3Type.GetImportName(options).Should().Be("Class13");
+            ts4Type.GetImportName(options).Should().Be("Class14");
+            ts5Type.GetImportName(options).Should().Be("Class15");
         }
 
         public enum Colors
@@ -215,16 +234,13 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         }
         public record Class3(string Name);
 
-        
+
 
         public struct Struct4
         {
 
         }
-        //public class Class5 : Dictionary<string, string>
-        //{
-        //    public string StrProp { get; set; }
-        //}
+
 
         public class Circle1
         {
@@ -232,7 +248,7 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
 
         }
         public class Circle2
-        { 
+        {
             public Circle1 Circle { get; set; }
         }
         public class MyFormFile : IFormFile
@@ -258,6 +274,43 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
             {
                 throw new NotImplementedException();
             }
+        }
+    }
+
+
+    namespace T1
+    {
+        public class Class1
+        {
+
+        }
+    }
+    namespace T2
+    {
+        public class Class1
+        {
+
+        }
+    }
+    namespace T3
+    {
+        public class Class1<T>
+        {
+
+        }
+    }
+    namespace T4
+    {
+        public class Class1<T, T2>
+        {
+
+        }
+    }
+    namespace T5
+    {
+        public enum Class1
+        {
+
         }
     }
 }

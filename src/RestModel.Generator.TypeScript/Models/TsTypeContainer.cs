@@ -2,7 +2,7 @@
 
 namespace RestModel.Generator.TypeScript.Models
 {
-    public class TsTypeContainer : ITsTypeContainer
+    public class TsTypeContainer : NameManager, ITsTypeContainer, INameManager
     {
         private static List<SupportTypeInfo> SupportTypes = typeof(ITsType)
             .Assembly.GetTypes()
