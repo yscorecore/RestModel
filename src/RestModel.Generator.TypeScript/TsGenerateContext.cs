@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using RestModel.Generator.TypeScript.Models;
+﻿using RestModel.Generator.TypeScript.Models;
 
 namespace RestModel.Generator.TypeScript
 {
     public record TsGenerateContext
     {
         public TsConvertOptions Options { get; init; }
-
 
 
         public TextWriter Output { get; init; }

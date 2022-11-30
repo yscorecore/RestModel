@@ -8,18 +8,23 @@ namespace RestModel.Generator.TypeScript.Client
 {
     public class TsClientGenerator
     {
-        public Task GenerateClientFile(TsGenerateContext context, ControllerInfo controllerInfo, IEnumerable<ActionInfo> actionInfos, IDictionary<Type, ITsType> modelTypeMapper)
+
+
+        public async Task GenerateClientFile(TsGenerateContext context, ControllerInfo controllerInfo, IEnumerable<ActionInfo> actionInfos, IDictionary<Type, ITsType> modelTypeMapper)
         {
-            var actionNameManager = new NameManager();
-            var clientName = controllerInfo.ControllerName + "Api";
-            var title = $"class {clientName} extends {context.Options.BaseApiClassName}";
-            var contents = actionInfos.SelectMany(p => GenerateApiBody(actionNameManager, context.Options, controllerInfo, p, modelTypeMapper)).Where(p => !string.IsNullOrEmpty(p));
-            context.Output.WriteLine();
-            context.WriteBlock(title, contents);
-            context.Output.WriteLine();
-            context.Output.WriteLine($"export const {clientName.ToCamelCaseName()} = new {clientName}();");
-            context.Output.WriteLine();
-            return Task.CompletedTask;
+            var apiClient = new ApiClient();
+            var text = await apiClient.Run(context.Options, controllerInfo, actionInfos, modelTypeMapper);
+            await context.Output.WriteLineAsync(text);
+            //var actionNameManager = new NameManager();
+            //var clientName = controllerInfo.ControllerName + "Api";
+            //var title = $"class {clientName} extends {context.Options.BaseApiClassName}";
+            //var contents = actionInfos.SelectMany(p => GenerateApiBody(actionNameManager, context.Options, controllerInfo, p, modelTypeMapper)).Where(p => !string.IsNullOrEmpty(p));
+            //context.Output.WriteLine();
+            //context.WriteBlock(title, contents);
+            //context.Output.WriteLine();
+            //context.Output.WriteLine($"export const {clientName.ToCamelCaseName()} = new {clientName}();");
+            //context.Output.WriteLine();
+            //return Task.CompletedTask;
         }
         private string[] GenerateApiBody(NameManager nameManager, TsConvertOptions options, ControllerInfo controllerInfo, ActionInfo actionInfo, IDictionary<Type, ITsType> modelTypeMapper)
         {

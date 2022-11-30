@@ -13,6 +13,7 @@ namespace RestModel.Generator.TypeScript
             var modelTypeMapper = BuildModelTypeMapper(allActionEntry, context.Options);
             await GenerateModelFile(context, modelTypeMapper);
             await GenerateApiFile(context, allActionEntry, modelTypeMapper);
+          
         }
 
         private Task GenerateModelFile(GeneratorContext<TsConvertOptions> context, IDictionary<Type, ITsType> modelTypeMapper)

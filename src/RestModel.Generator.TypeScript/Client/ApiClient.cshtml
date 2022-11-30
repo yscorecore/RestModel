@@ -1,0 +1,32 @@
+﻿@model RestModel.Generator.TypeScript.Client.ApiClient.Model
+
+class @Model.ClassName extends @Model.Options.BaseApiClassName {
+
+    @foreach (var item in Model.ApiInfos)
+    {
+    @:  public @(Model.NewActionName(item))(@(Model.ArgumentLists(item))): Promise<@Model.ActionResultType(item)> {
+    @:    return this.send({
+    @:      url: @(Model.GetUrl(item)),
+    @:      method: '@(Model.GetMethod(item))',
+        if (item.HeaderArgument.Any())
+        {
+    @:      headers: @(Model.GetHeaders(item)),      
+        }
+        if (item.FormArguments.Any())
+        {
+    @:      forms: @(Model.GetHeaders(item)),
+        }
+        if (item.ParamArguments.Any())
+        {
+    @:      params: @(Model.GetParams(item)),
+        }
+        if (item.BodyArgument != null)
+        {
+    @:      body: @(Model.GetBody(item)),
+        }
+    @:    });
+    @:  }
+}
+}
+
+export const @Model.ClassCamelCaseName = new @(Model.ClassName)();
