@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebProject1.Controllers
@@ -20,9 +21,9 @@ namespace WebProject1.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        [Route("aabbcc/{a:range(1,3)}_{b}/{d:int}")]
-        public IEnumerable<WeatherForecast> Get([FromRoute(Name ="b")]int a,  int b,string c)
+        [HttpPost]
+        //[Route("aabbcc/{a:range(1,3)}_{b}/{d:int}")]
+        public IEnumerable<WeatherForecast> Get([FromBody]TestModel testModel2)
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -33,14 +34,37 @@ namespace WebProject1.Controllers
             .ToArray();
         }
     }
-    [TypeConverter()]
+    [TypeConverter(typeof(TestModelConverter))]
     public class TestModel
     {
-        [FromRoute]
         public int Id { get; set; }
-        [FromQuery]
         public int Age { get; set; }
-        [FromBody]
         public string? Content { get; set; }
+    }
+
+    public class TestModelConverter : StringConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
+        {
+            return base.CanConvertFrom(context, sourceType)||sourceType==typeof(string);
+        }
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
+        {
+            if (value is string)
+            {
+                return new TestModel();
+            }
+            return base.ConvertFrom(context, culture, value);
+        }
+    }
+
+    public class TestModel2
+    {
+        //[FromRoute]
+        public int Id2 { get; set; }
+        //[FromQuery]
+        public int Age2 { get; set; }
+        [FromHeader]
+        public string? Content2 { get; set; }
     }
 }

@@ -47,6 +47,7 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         [Theory]
         [InlineData(typeof(IFormFile), "File")]
         [InlineData(typeof(MyFormFile), "File")]
+        [InlineData(typeof(IFormFileCollection), "FileList")]
         public void ShouldConvertFormFileType(Type clrType, string expectedType)
         {
             var options = TsConvertOptions.Default;

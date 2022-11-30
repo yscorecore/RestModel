@@ -9,12 +9,19 @@ namespace RestModel.Generator.TypeScript.Models.Types
 
         public static bool CanFromClrType(TsConvertContext tsConvert, Type clrType)
         {
-            return typeof(IFormFile).IsAssignableFrom(clrType);
+            return typeof(IFormFile).IsAssignableFrom(clrType) || typeof(IFormFileCollection).IsAssignableFrom(clrType);
         }
 
         public string GetDisplayName(TsConvertOptions options)
         {
-            return "File";
+            if (typeof(IFormFile).IsAssignableFrom(this.ClrType))
+            {
+                return "File";
+            }
+            else
+            {
+                return "FileList";
+            }
         }
 
         public void InitType(TsConvertContext tsConvert, Type clrType)

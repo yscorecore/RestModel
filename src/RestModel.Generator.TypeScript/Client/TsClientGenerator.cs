@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Data;
+using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing.Patterns;
 using RestModel.Generator.TypeScript.Models;
 
@@ -9,7 +11,7 @@ namespace RestModel.Generator.TypeScript.Client
         public Task GenerateClientFile(TsGenerateContext context, ControllerInfo controllerInfo, IEnumerable<ActionInfo> actionInfos, IDictionary<Type, ITsType> modelTypeMapper)
         {
             var actionNameManager = new NameManager();
-            var clientName = controllerInfo.ControllerName + "ApiClient";
+            var clientName = controllerInfo.ControllerName + "Api";
             var title = $"class {clientName} extends {context.Options.BaseApiClassName}";
             var contents = actionInfos.SelectMany(p => GenerateApiBody(actionNameManager, context.Options, controllerInfo, p, modelTypeMapper)).Where(p => !string.IsNullOrEmpty(p));
             context.Output.WriteLine();
@@ -31,47 +33,93 @@ namespace RestModel.Generator.TypeScript.Client
             var actionName = nameManager.Request(actionInfo.ActionName);
             var methodName = actionInfo.HttpMethod;
             var arguments = string.Join(", ", actionInfo.Arguments.Concat(unknowArguments).Select(p => $"{p.ParameterName}: {modelTypeMapper[p.ParameterType].GetDisplayName(options)}"));
-            var headerText = BuildHeaderContent();
-            var bodyText = BuildBodyContent();
-            var paramText = BuildParamsContent();
-            var formText = BuildFormContent();
-
-
+            var headerText = BuildHeaderContent(usedArguments);
+            var formText = BuildFormContent(usedArguments);
+            var paramText = BuildParamsContent(usedArguments);
+            var bodyText = BuildBodyContent(usedArguments);
+            //没有识别的参数
+            var leftArguments = actionInfo.Arguments.Except(usedArguments).ToList();
+            foreach (var argument in leftArguments)
+            {
+                Console.WriteLine($"unknow argument '{argument.ParameterName}' in method '{actionInfo.ActionName}' of controller '{controllerInfo.ClassName}'");
+            }
             return new string[]
                 {
                     $"public {actionName}({arguments}): Promise<{returnType.GetDisplayName(options)}> {{",
-                    "    return this.send({",
-                    $"      url:{url},",
-                    $"      method:'{methodName}',",
-                    headerText!=null? $"      headers: {headerText}" : null,
-                    paramText != null? $"      params: {paramText}," : null,
-                    bodyText!=null? $"      body: {bodyText}," : null,
-                    formText != null? $"      form: {formText}" : null,
-                    "    });",
+                    "  return this.send({",
+                    $"  url:{url},",
+                    $"  method:'{methodName}',",
+                    headerText!=null? $"  headers: {headerText}" : null,
+                    formText != null? $"  form: {formText}" : null,
+                    paramText != null? $"  params: {paramText}," : null,
+                    bodyText!=null? $"  body: {bodyText}," : null,
+                    "  });",
                     "}"
                 };
 
-            string BuildHeaderContent()
+            string BuildHeaderContent(List<ArgumentInfo> usedArguments)
             {
-                var items = actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Header)
-                     .Select(p => p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}").ToList();
-                return items.Count > 0 ? WrapSegment(string.Join(", ", items)) : default;
+                var items = actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Header).ToList();
+                usedArguments.AddRange(items);
+                return items.Count > 0 ? WrapSegment(string.Join(", ", items.Select(BuildHeaderSegment))) : default;
             }
-            string BuildBodyContent()
+            string BuildHeaderSegment(ArgumentInfo p)
             {
-                return actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Body).Select(p => $"{p.ValueName}").FirstOrDefault();
+                // header 不支持复杂对象
+                return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
             }
-            string BuildParamsContent()
+            string BuildFormContent(List<ArgumentInfo> usedArguments)
             {
-                var items = actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Query)
-                    .Select(p => p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}").ToList();
-                return items.Count > 0 ? WrapSegment(string.Join(", ", items)) : default;
+                var items = actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Form).ToList();
+                usedArguments.AddRange(items);
+                return items.Count > 0 ? WrapSegment(string.Join(", ", items.Select(BuildFormSegment))) : default;
             }
-            string BuildFormContent()
+            string BuildFormSegment(ArgumentInfo p)
             {
-                var items = actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Form)
-                    .Select(p => p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}").ToList();
-                return items.Count > 0 ? WrapSegment(string.Join(", ", items)) : default;
+                if (p.ParameterType == typeof(IFormFile) || p.ParameterType == typeof(IFormFileCollection) || p.CanConvertFromString)
+                {
+                    return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
+                }
+                else
+                {
+                    //复杂类型
+                    return $"...{p.ParameterName}";
+                }
+            }
+            string BuildBodyContent(List<ArgumentInfo> usedArguments)
+            {
+                var bodyArguments = actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Body).ToList();
+                var complexArguments = actionInfo.Arguments.Except(usedArguments).Where(p => p.ValueSource == ValueSource.None && !p.CanConvertFromString).ToList();
+
+                var item = bodyArguments.Union(complexArguments).FirstOrDefault();
+                // body 只运行有一个
+                if (item != null)
+                {
+                    usedArguments.Add(item);
+                }
+
+                return item != null ? item.ParameterName : default;
+            }
+            string BuildParamsContent(List<ArgumentInfo> usedArguments)
+            {
+                var queryArguments = actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Query).ToList();
+                var simpleArguments = actionInfo.Arguments.Except(usedArguments).Where(p => p.ValueSource == ValueSource.None && p.CanConvertFromString).ToList();
+
+                var items = queryArguments.Union(simpleArguments).ToList();
+                usedArguments.AddRange(items);
+                return items.Count > 0 ? WrapSegment(string.Join(", ", items.Select(BuildParamsSegment))) : default;
+            }
+            string BuildParamsSegment(ArgumentInfo p)
+            {
+                if (p.CanConvertFromString)
+                {
+                    return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
+                }
+                else
+                {
+                    //复杂类型
+                    return $"...{p.ParameterName}";
+                }
             }
             string WrapSegment(string text)
             {
@@ -123,7 +171,7 @@ namespace RestModel.Generator.TypeScript.Client
                         }
                         else
                         {
-                            unknowArguments.Add(new ArgumentInfo { ParameterType = typeof(string), ParameterName = rpp.Name });
+                            unknowArguments.Add(new ArgumentInfo { ParameterType = typeof(string), ParameterName = rpp.Name, CanConvertFromString = true });
                             sb.Append($"${{encodeURIComponent({rpp.Name})}}");
                         }
                     }
@@ -142,8 +190,9 @@ namespace RestModel.Generator.TypeScript.Client
                           actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Route)
                          .Where(p => p.ParameterName == name).FirstOrDefault()
                          ??
-                         actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.None)
+                         actionInfo.Arguments
                          .Where(p => p.ParameterName == name).FirstOrDefault();
+
             }
 
         }

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -80,6 +81,7 @@ namespace RestModel
                 DefineAllowAnonymous = Attribute.IsDefined(parameter, typeof(AllowAnonymousAttribute), true),
                 DefineAuthorize = Attribute.IsDefined(parameter, typeof(AuthorizeAttribute), true),
                 ParameterType = parameter.ParameterType,
+                CanConvertFromString  = CanConvertFromString(parameter),
                 ValueSource = source,
                 ValueName = name,
             };
@@ -98,6 +100,11 @@ namespace RestModel
                 var fromBody = parameter.GetCustomAttribute<FromBodyAttribute>(true);
                 if (fromBody != null) return (null, ValueSource.Body);
                 return (null, ValueSource.None);
+            }
+            bool CanConvertFromString(ParameterInfo type)
+            {
+                var converter = TypeDescriptor.GetConverter(type.ParameterType);
+                return converter != null && converter.CanConvertFrom(typeof(string));
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace WebProject1
+﻿using Castle.Core.Logging;
+
+namespace WebProject1
 {
     public class Program
     {
@@ -7,7 +9,6 @@
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
