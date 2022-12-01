@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace RestModel
 {
@@ -21,4 +16,22 @@ namespace RestModel
         public List<ArgumentInfo> Arguments { get; set; }
 
     }
+    public static class ActionInfoExtensions
+    {
+        public static IEnumerable<Type> GetAllModelTypes(this ActionInfo action)
+        {
+            foreach (var arg in action.Arguments)
+            {
+                yield return arg.ParameterType;
+
+            }
+            if (action.ReturnInfo.ResultType != null)
+            {
+                yield return action.ReturnInfo.ResultType;
+            }
+
+        }
+    }
+
+    
 }

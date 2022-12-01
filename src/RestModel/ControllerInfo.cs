@@ -20,4 +20,11 @@ namespace RestModel
 
         public List<ActionInfo> Actions { get; init; }
     }
+    public static class ControllerInfoExtensions
+    {
+        public static List<ApiInfo> AllApiInfos(this ControllerInfo controllerInfo)
+        {
+           return controllerInfo.Actions.Select(p => ApiInfo.Create(controllerInfo, p)).ToList();
+        }
+    }
 }

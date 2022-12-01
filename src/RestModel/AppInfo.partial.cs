@@ -35,7 +35,7 @@ namespace RestModel
                 Interfaces = type.GetInterfaces(),
                 AreaName = type.GetCustomAttribute<AreaAttribute>(true)?.RouteValue,
                 RouteTemplate = type.GetCustomAttribute<RouteAttribute>(true)?.Template,
-                Actions = FindActionMethods(type).Select(FromActionMethod).ToList()
+                Actions = FindActionMethods(type).Select(FromActionMethod).Where(p => !IsActionResult(p)).ToList()
             };
         }
         private static IEnumerable<MethodInfo> FindActionMethods(Type controller)
@@ -55,6 +55,10 @@ namespace RestModel
                 ReturnInfo = CreateReturnInfo(action),
                 Arguments = action.GetParameters().Select(FromParameter).ToList()
             };
+        }
+        private static bool IsActionResult(ActionInfo actionInfo)
+        {
+            return typeof(IActionResult).IsAssignableFrom(actionInfo.ReturnInfo.ResultType);
         }
         private static ReturnInfo CreateReturnInfo(MethodInfo action)
         {
@@ -81,7 +85,7 @@ namespace RestModel
                 DefineAllowAnonymous = Attribute.IsDefined(parameter, typeof(AllowAnonymousAttribute), true),
                 DefineAuthorize = Attribute.IsDefined(parameter, typeof(AuthorizeAttribute), true),
                 ParameterType = parameter.ParameterType,
-                CanConvertFromString  = CanConvertFromString(parameter),
+                CanConvertFromString = CanConvertFromString(parameter),
                 ValueSource = source,
                 ValueName = name,
             };

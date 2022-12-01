@@ -40,6 +40,16 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         [InlineData(typeof(Range<>), @"export interface Range<T> extends Range2<T, T> {
     middle: T;
 }")]
+        [InlineData(typeof(SubClass), @"export interface SubClass extends Omit<BaseClass, 'value'> {
+    value: number;
+}")]
+        [InlineData(typeof(SubClass2), @"export interface SubClass2 extends Omit<BaseClass<string>, 'value'> {
+    value: number;
+}")]
+        [InlineData(typeof(SubClass2<>), @"export interface SubClass2<T> extends Omit<BaseClass<T>, 'value'> {
+    value: number;
+    newValue: T;
+}")]
         public void ToTypeScriptModelCode(Type type, string expected)
         {
             var options = TsConvertOptions.Default;
@@ -86,6 +96,30 @@ namespace RestModel.Generator.TypeScript.UnitTest.Models
         {
             public T1? Start { get; set; }
             public T2? End { get; set; }
+        }
+
+        public class BaseClass
+        {
+            public string Value { get; set; }
+            public string Value2 { get; set; }
+        }
+        public class SubClass : BaseClass
+        {
+            public new int Value { get; set; }
+        }
+        public class BaseClass<T>
+        {
+            public T Value { get; set; }
+        }
+
+        public class SubClass2 : BaseClass<string>
+        {
+            public new int Value { get; set; }
+        }
+        public class SubClass2<T> : BaseClass<T>
+        {
+            public new int Value { get; set; }
+            public T NewValue { get; set; }
         }
     }
 }

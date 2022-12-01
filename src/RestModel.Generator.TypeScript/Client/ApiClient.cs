@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using RazorLight;
 using RestModel.Generator.TypeScript.Models;
 
@@ -24,31 +18,30 @@ namespace RestModel.Generator.TypeScript.Client
             .UseMemoryCachingProvider()
             .DisableEncoding()
             .Build();
-            //engine.CompileTemplateAsync("ApiClient").GetAwaiter().GetResult();
         }
 
-        public async Task<string> Run(TsConvertOptions options, ControllerInfo controllerInfo, IEnumerable<ActionInfo> actionInfos, IDictionary<Type, ITsType> modelTypeMapper)
+        public async Task BuildScript(TsGenerateContext context, string className, List<ApiInfo> apiInfos,  IDictionary<Type, ITsType> modelTypeMapper)
         {
             var model = new Model
             {
-                Controller = controllerInfo,
-                ApiInfos = actionInfos.Select(p => ApiInfo.Create(controllerInfo, p)).ToList(),
-                Options = options,
+                ClassName = className,
+                ApiInfos = apiInfos,
+                Options = context.Options,
                 TypeMapper = modelTypeMapper,
                 NameManager = new NameManager(),
             };
-            return await engine.CompileRenderAsync("ApiClient", model);
+            var text= await engine.CompileRenderAsync(nameof(ApiClient), model);
+            await context.Output.WriteLineAsync(text);
         }
 
         public class Model
         {
-            public ControllerInfo Controller { get; init; }
             public List<ApiInfo> ApiInfos { get; init; }
             public TsConvertOptions Options { get; init; }
             public NameManager NameManager { get; init; }
             public IDictionary<Type, ITsType> TypeMapper { get; init; }
 
-            public string ClassName => $"{Controller.ControllerName}Api";
+            public string ClassName { get; init; }
 
             public string NewActionName(ApiInfo apiInfo) => NameManager.Request(apiInfo.ActionInfo.ActionName);
             public string ActionResultType(ApiInfo apiInfo) => GetTsTypeName(apiInfo.ActionInfo.ReturnInfo.ResultType);
@@ -75,7 +68,7 @@ namespace RestModel.Generator.TypeScript.Client
 
             public string GetHeaders(ApiInfo apiInfo)
             {
-                return $"{{{string.Join(", ", apiInfo.HeaderArgument.Select(BuildHeaderSegment))}}}";
+                return $"{{ {string.Join(", ", apiInfo.HeaderArgument.Select(BuildHeaderSegment))} }}";
                 string BuildHeaderSegment(ArgumentInfo p)
                 {
                     // header 不支持复杂对象
@@ -84,7 +77,7 @@ namespace RestModel.Generator.TypeScript.Client
             }
             public string GetForms(ApiInfo apiInfo)
             {
-                return $"{{{string.Join(", ", apiInfo.FormArguments.Select(BuildFormSegment))}}}";
+                return $"{{ {string.Join(", ", apiInfo.FormArguments.Select(BuildFormSegment))} }}";
                 string BuildFormSegment(ArgumentInfo p)
                 {
                     if (p.ParameterType == typeof(IFormFile) || p.ParameterType == typeof(IFormFileCollection) || p.CanConvertFromString)
@@ -100,7 +93,7 @@ namespace RestModel.Generator.TypeScript.Client
             }
             public string GetParams(ApiInfo apiInfo)
             {
-                return $"{{{string.Join(", ", apiInfo.ParamArguments.Select(BuildParamSegment))}}}";
+                return $"{{ {string.Join(", ", apiInfo.ParamArguments.Select(BuildParamSegment))} }}";
                 string BuildParamSegment(ArgumentInfo p)
                 {
                     if (p.CanConvertFromString)

@@ -16,6 +16,8 @@ namespace RestModel.Generator.TypeScript.Models.Types
 
         public string Namespace { get; private set; }
 
+        public List<string> OverrideProperties { get; private set; } = new List<string>();
+
         public static bool CanFromClrType(TsConvertContext tsConvert, Type clrType)
         {
             return clrType.IsGenericTypeDefinition;
@@ -25,19 +27,22 @@ namespace RestModel.Generator.TypeScript.Models.Types
         {
             this.Namespace = clrType.Namespace;
             this.TypeName = tsConvert.TypeFactory.Request(clrType.Name.Substring(0, clrType.Name.IndexOf('`')));
+            this.Fields = clrType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+              .Where(p => p.DeclaringType == clrType)
+              .Select(p => new TsField(p.Name, tsConvert.TypeFactory.FromClrType(p.PropertyType)))
+             .ToList();
+
             if (!IsRootType())
             {
                 this.Parent = tsConvert.TypeFactory.FromClrType(clrType.BaseType);
+                this.OverrideProperties = clrType.BaseType.GetProperties().Select(p => p.Name).Intersect(this.Fields.Select(p => p.Name)).ToList();
             }
 
             this.GenericArguments = clrType.GetGenericArguments()
                 .Select(tsConvert.TypeFactory.FromClrType)
                 .ToList();
 
-            this.Fields = clrType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-              .Where(p => p.DeclaringType == clrType)
-              .Select(p => new TsField(p.Name, tsConvert.TypeFactory.FromClrType(p.PropertyType)))
-             .ToList();
+            
 
             bool IsRootType()
             {
@@ -61,7 +66,6 @@ namespace RestModel.Generator.TypeScript.Models.Types
                     {
                         return PropertyAssignKind.Nullable;
                     }
-
                 }
                 else
                 {
@@ -70,7 +74,6 @@ namespace RestModel.Generator.TypeScript.Models.Types
                         return PropertyAssignKind.Nullable;
                     }
                 }
-
                 return PropertyAssignKind.Unknown;
             }
         }
@@ -89,12 +92,26 @@ namespace RestModel.Generator.TypeScript.Models.Types
         {
             var camelCase = context.Options.CamelCaseProperty;
             Func<string, string> convertFunc = camelCase ? a => a.ToCamelCaseName() : (a) => a;
+
             var title = Parent is null ?
                 $"export interface {GetDisplayName(context.Options)}"
-                : $"export interface {GetDisplayName(context.Options)} extends {Parent.GetDisplayName(context.Options)}";
+                : $"export interface {GetDisplayName(context.Options)} extends {BuildParentName()}";
             var contents = Fields.Select(item => $"{convertFunc(item.Name)}: {item.Type.GetDisplayName(context.Options)};");
 
+
             context.WriteBlock(title, contents);
+
+            string BuildParentName()
+            {
+                if (this.OverrideProperties.Count > 0)
+                {
+                    return $"Omit<{this.Parent.GetDisplayName(context.Options)}, {string.Join(" | ", this.OverrideProperties.Select(p => $"'{convertFunc(p)}'"))}>";
+                }
+                else
+                {
+                    return this.Parent.GetDisplayName(context.Options);
+                }
+            }
         }
         public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)
         {
