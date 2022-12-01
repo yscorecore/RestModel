@@ -88,6 +88,8 @@ namespace RestModel
                 CanConvertFromString = CanConvertFromString(parameter),
                 ValueSource = source,
                 ValueName = name,
+                HasDefaultValue = parameter.HasDefaultValue,
+                DefaultValue = parameter.RawDefaultValue
             };
             (string, ValueSource) GetValueInfo()
             {

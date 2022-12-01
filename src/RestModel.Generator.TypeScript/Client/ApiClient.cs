@@ -50,8 +50,12 @@ namespace RestModel.Generator.TypeScript.Client
             public string GetTsTypeName(Type type) => TypeMapper[type].GetDisplayName(Options);
             public string ArgumentLists(ApiInfo apiInfo)
             {
-                var arguments = apiInfo.ActionInfo.Arguments.Select(p => $"{p.ParameterName}: {GetTsTypeName(p.ParameterType)}");
+                var arguments = apiInfo.ActionInfo.Arguments.Select(p => $"{ParameterName(p)}: {GetTsTypeName(p.ParameterType)}");
                 return string.Join(", ", arguments);
+                string ParameterName(ArgumentInfo argumentInfo)
+                {
+                    return argumentInfo.HasDefaultValue ? $"{argumentInfo.ParameterName}?" : argumentInfo.ParameterName;
+                }
             }
             public string GetUrl(ApiInfo apiInfo)
             {

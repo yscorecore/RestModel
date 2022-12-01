@@ -8,7 +8,6 @@
 
         public bool CanConvertFromString { get; init; }
 
-        public bool IsSimpleType { get; init; }
         public string ValueName { get; init; }
 
         public ValueSource ValueSource { get; init; }
@@ -16,7 +15,9 @@
         public bool DefineAllowAnonymous { get; init; }
         public bool DefineAuthorize { get; init; }
 
-        public bool NullableValue => Nullable.GetUnderlyingType(ParameterType) != null;
+        public bool HasDefaultValue { get; init; }
+        public object DefaultValue { get; init; }
+
     }
 
     public enum ValueSource
