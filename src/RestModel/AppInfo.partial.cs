@@ -8,19 +8,20 @@ namespace RestModel
 {
     public partial class AppInfo
     {
-        public static AppInfo FromAssembly(IEnumerable<Assembly> assemblies)
+        public static AppInfo FromAssembly(IEnumerable<Assembly> assemblies, Func<string, bool> controllerFilter = null)
         {
             return new AppInfo
             {
-                Controllers = assemblies.SelectMany(p => FindControllerTypes(p)).Select(FromControllerType).ToList()
+                Controllers = assemblies.SelectMany(p => FindControllerTypes(p, controllerFilter)).Select(FromControllerType).ToList()
             };
         }
 
-        private static IEnumerable<Type> FindControllerTypes(Assembly assembly)
+        private static IEnumerable<Type> FindControllerTypes(Assembly assembly, Func<string, bool> controllerFilter)
         {
             return assembly.GetTypes()
                 .Where(p => !p.IsAbstract && typeof(ControllerBase).IsAssignableFrom(p))
-                .Where(p => Attribute.IsDefined(p, typeof(ControllerAttribute), true));
+                .Where(p => Attribute.IsDefined(p, typeof(ControllerAttribute), true))
+                .Where(p => controllerFilter?.Invoke(p.FullName) ?? true);
         }
         private static ControllerInfo FromControllerType(Type type)
         {

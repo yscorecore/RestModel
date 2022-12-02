@@ -12,7 +12,7 @@ namespace RestModel.Generator
             where G : IGenerator<T>, new()
         {
             var assemblies = LoadAssemblies(generatorInfo);
-            var appInfo = AppInfo.FromAssembly(assemblies);
+            var appInfo = AppInfo.FromAssembly(assemblies, (p) => p.IsMatchWildcardAnyOne(generatorInfo.ControllerRules));
             Directory.CreateDirectory(generatorInfo.Output);
             var context = new GeneratorContext<T>
             {
@@ -30,7 +30,7 @@ namespace RestModel.Generator
                 var files = Directory.GetFiles(generatorOptions.Input, "*.dll");
                 foreach (var file in files)
                 {
-                    if (Path.GetFileName(file).IsMatchWildcardAnyOne(generatorOptions.ControllerDlls))
+                    if (Path.GetFileName(file).IsMatchWildcardAnyOne(generatorOptions.ControllerRules))
                     {
                         yield return Assembly.LoadFrom(file);
                     }
@@ -40,10 +40,16 @@ namespace RestModel.Generator
     }
     public class GeneratorInfo<T>
     {
+        static char[] SplitChars = new char[] { ',', ';' };
         public string Input { get; set; }
         public string Output { get; set; }
-       // public bool ClearOutput { get; set; } = false;
-        public string[] ControllerDlls { get; set; }
+        public string Assemblies { get; set; }
+        public string Controllers { get; set; }
+        public Action<string> Logger { get; set; } = Console.WriteLine;
         public T Options { get; set; }
+        public string[] AssemmbliesRules => string.IsNullOrEmpty(Assemblies) ? new string[] { "*.dll" } :
+            Assemblies.Split(SplitChars, StringSplitOptions.RemoveEmptyEntries);
+        public string[] ControllerRules => string.IsNullOrEmpty(Controllers) ? new string[] { "*" } :
+            Controllers.Split(SplitChars, StringSplitOptions.RemoveEmptyEntries);
     }
 }
