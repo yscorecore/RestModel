@@ -30,7 +30,7 @@ namespace RestModel.Generator
                 var files = Directory.GetFiles(generatorOptions.Input, "*.dll");
                 foreach (var file in files)
                 {
-                    if (Path.GetFileName(file).IsMatchWildcardAnyOne(generatorOptions.ControllerRules))
+                    if (Path.GetFileName(file).IsMatchWildcardAnyOne(generatorOptions.AssemmbliesRules))
                     {
                         yield return Assembly.LoadFrom(file);
                     }

@@ -19,7 +19,7 @@ namespace RestModel
         private static IEnumerable<Type> FindControllerTypes(Assembly assembly, Func<string, bool> controllerFilter)
         {
             return assembly.GetTypes()
-                .Where(p => !p.IsAbstract && typeof(ControllerBase).IsAssignableFrom(p))
+                .Where(p => !p.IsAbstract && typeof(ControllerBase).IsAssignableFrom(p) && !p.IsGenericTypeDefinition)
                 .Where(p => Attribute.IsDefined(p, typeof(ControllerAttribute), true))
                 .Where(p => controllerFilter?.Invoke(p.FullName) ?? true);
         }
@@ -35,7 +35,7 @@ namespace RestModel
                 DefineAuthorize = Attribute.IsDefined(type, typeof(AuthorizeAttribute), true),
                 Interfaces = type.GetInterfaces(),
                 AreaName = type.GetCustomAttribute<AreaAttribute>(true)?.RouteValue,
-                RouteTemplate = type.GetCustomAttribute<RouteAttribute>(true)?.Template,
+                RouteTemplate = type.GetCustomAttributes<RouteAttribute>(true).FirstOrDefault()?.Template,
                 Actions = FindActionMethods(type).Select(FromActionMethod).Where(p => !IsActionResult(p)).ToList()
             };
         }
@@ -45,8 +45,8 @@ namespace RestModel
         }
         private static ActionInfo FromActionMethod(MethodInfo action)
         {
-            var method = action.GetCustomAttribute<HttpMethodAttribute>(true);
-            var route = action.GetCustomAttribute<RouteAttribute>(true);
+            var method = action.GetCustomAttributes<HttpMethodAttribute>(true).FirstOrDefault();
+            var route = action.GetCustomAttributes<RouteAttribute>(true).FirstOrDefault();
             return new ActionInfo
             {
                 MethodInfo = action,

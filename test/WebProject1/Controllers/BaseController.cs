@@ -126,6 +126,47 @@ namespace WebProject1.Controllers
 
     }
 
+    [ApiController]
+    [Route("[controller]/[action]")]
+    [AutoConstructor]
+    public partial class ComplexController : BaseController<ComplexObject>
+    {
 
+
+    }
+    [ApiController]
+    [Route("[controller]/[action]")]
+    [AutoConstructor]
+    public partial class SimpleController : BaseController<SimpleModel>
+    {
+    }
+    [ApiController]
+    [Route("[controller]/[action]")]
+    public partial class DateTimeController : BaseController<DateTime>
+    {
+
+
+    }
+    [ApiController]
+    [Route("[controller]/[action]")]
+    public partial class IntController : BaseController<int>
+    {
+
+
+    }
+    [ApiController]
+    [Route("[controller]/[action]")]
+    public partial class IntArrayController : BaseController<int[]>
+    {
+
+
+    }
+    [ApiController]
+    [Route("[controller]/[action]")]
+    public partial class StringController : BaseController<string>
+    {
+
+
+    }
 }
 

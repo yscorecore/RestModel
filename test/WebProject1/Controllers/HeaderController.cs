@@ -13,9 +13,9 @@ namespace WebProject1.Controllers
             return a + b;
         }
         [HttpGet]
-        public int SumWithObject([FromHeader] int a, [FromHeader] int b, [FromHeader] ComplexObject complex, [FromHeader] SimpleModel simple)
+        public int SumWithObject([FromHeader] int a, [FromHeader] int b, [FromHeader] SimpleModel simple)
         {
-            return a + b + complex.Age + simple.Age;
+            return a + b + simple.Age;
         }
     }
 }
