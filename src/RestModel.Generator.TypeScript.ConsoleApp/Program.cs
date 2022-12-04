@@ -8,11 +8,11 @@ namespace RestModel.Generator.TypeScript.ConsoleApp
         {
             await Generator.Run<TypeScriptGenerator, TsConvertOptions>(new GeneratorInfo<TsConvertOptions>
             {
-                Input = @"E:\Repos\RestModel1\test\WebProject1\bin\Debug\net6.0",
+                Input = @"E:\Repos\RestModel1\example\WebProject1\bin\Debug\net6.0",
                 Assemblies = "WebProject1.dll" ,
                 //Input = @"C:\Users\yangpengbo\source\repos\obpt123\StudentMeal\StudentMeal\src\StudentMeal.ImageService\bin\Debug\net6.0",
                 //Assemblies = "StudentMeal.*.dll",
-                Output = "output",
+                Output = @"E:\Repos\RestModel1\example\WebProject1.Client.TypeScript\src\client",
                 Options = new TsConvertOptions()
 
             });
