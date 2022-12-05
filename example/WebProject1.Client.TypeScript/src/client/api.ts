@@ -169,7 +169,7 @@ class SimpleApi extends ApiClientBase {
     return this.send({
       url: `/Simple/GetModelFromDefault`,
       method: 'GET',
-      params: { model },
+      params: { model:`${model}` },
     });
   }
   public GetModelFromDefaultAndReturnTask(model: SimpleModel): Promise<SimpleModel> {
@@ -530,10 +530,12 @@ class IntApi extends ApiClientBase {
     });
   }
   public GetModelFromForm(model: number): Promise<number> {
+   // const fm = new FormData();
+
     return this.send({
       url: `/Int/GetModelFromForm`,
       method: 'GET',
-      forms: { model },
+      forms: {model},
     });
   }
   public PostModelFromDefault(model: number): Promise<number> {
@@ -673,7 +675,7 @@ class IntArrayApi extends ApiClientBase {
     return this.send({
       url: `/IntArray/GetModelFromQuery`,
       method: 'GET',
-      params: { ...model },
+      params: { model },
     });
   }
   public GetModelFromHeader(model: number[]): Promise<number[]> {
@@ -694,7 +696,7 @@ class IntArrayApi extends ApiClientBase {
     return this.send({
       url: `/IntArray/GetModelFromForm`,
       method: 'GET',
-      forms: { ...model },
+      forms: { model },
     });
   }
   public PostModelFromDefault(model: number[]): Promise<number[]> {
@@ -708,7 +710,7 @@ class IntArrayApi extends ApiClientBase {
     return this.send({
       url: `/IntArray/PostModelFromQuery`,
       method: 'POST',
-      params: { ...model },
+      params: { model },
     });
   }
   public PostModelFromHeader(model: number[]): Promise<number[]> {
@@ -729,7 +731,7 @@ class IntArrayApi extends ApiClientBase {
     return this.send({
       url: `/IntArray/PostModelFromForm`,
       method: 'POST',
-      forms: { ...model },
+      forms: { model },
     });
   }
   public PutModelFromDefault(model: number[]): Promise<number[]> {
@@ -743,7 +745,7 @@ class IntArrayApi extends ApiClientBase {
     return this.send({
       url: `/IntArray/PutModelFromQuery`,
       method: 'PUT',
-      params: { ...model },
+      params: { model },
     });
   }
   public PutModelFromHeader(model: number[]): Promise<number[]> {
@@ -764,7 +766,7 @@ class IntArrayApi extends ApiClientBase {
     return this.send({
       url: `/IntArray/PutModelFromForm`,
       method: 'PUT',
-      forms: { ...model },
+      forms: { model },
     });
   }
   public DeleteModelFromDefault(model: number[]): Promise<number[]> {
@@ -778,7 +780,7 @@ class IntArrayApi extends ApiClientBase {
     return this.send({
       url: `/IntArray/DeleteModelFromQuery`,
       method: 'DELETE',
-      params: { ...model },
+      params: { model },
     });
   }
   public DeleteModelFromHeader(model: number[]): Promise<number[]> {
@@ -799,7 +801,7 @@ class IntArrayApi extends ApiClientBase {
     return this.send({
       url: `/IntArray/DeleteModelFromForm`,
       method: 'DELETE',
-      forms: { ...model },
+      forms: { model },
     });
   }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 using RazorLight;
 using RestModel.Generator.TypeScript.Models;
@@ -20,7 +21,7 @@ namespace RestModel.Generator.TypeScript.Client
             .Build();
         }
 
-        public async Task BuildScript(TsGenerateContext context, string className, List<ApiInfo> apiInfos,  IDictionary<Type, ITsType> modelTypeMapper)
+        public async Task BuildScript(TsGenerateContext context, string className, List<ApiInfo> apiInfos, IDictionary<Type, ITsType> modelTypeMapper)
         {
             var model = new Model
             {
@@ -30,7 +31,7 @@ namespace RestModel.Generator.TypeScript.Client
                 TypeMapper = modelTypeMapper,
                 NameManager = new NameManager(),
             };
-            var text= await engine.CompileRenderAsync(nameof(ApiClient), model);
+            var text = await engine.CompileRenderAsync(nameof(ApiClient), model);
             await context.Output.WriteLineAsync(text);
         }
 
@@ -59,13 +60,14 @@ namespace RestModel.Generator.TypeScript.Client
             }
             public string GetUrl(ApiInfo apiInfo)
             {
-                var result = Regex.Replace(apiInfo.UrlTemplate, @"\{(?<name>\w+)\}", (m) => {
+                var result = Regex.Replace(apiInfo.UrlTemplate, @"\{(?<name>\w+)\}", (m) =>
+                {
                     if (apiInfo.ActionInfo.Arguments.Any(p => p.ParameterName == m.Groups["name"].Value))
                     {
                         return "$" + m.Value;
                     }
                     return m.Value;
-                } );
+                });
                 return $"`{result}`";
             }
             public string GetMethod(ApiInfo apiInfo) => apiInfo.ActionInfo.HttpMethod;
@@ -76,6 +78,8 @@ namespace RestModel.Generator.TypeScript.Client
                 string BuildHeaderSegment(ArgumentInfo p)
                 {
                     // header 不支持复杂对象
+
+                    
                     return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
                 }
             }
@@ -84,7 +88,7 @@ namespace RestModel.Generator.TypeScript.Client
                 return $"{{ {string.Join(", ", apiInfo.FormArguments.Select(BuildFormSegment))} }}";
                 string BuildFormSegment(ArgumentInfo p)
                 {
-                    if (p.ParameterType == typeof(IFormFile) || p.ParameterType == typeof(IFormFileCollection) || p.CanConvertFromString)
+                    if (p.ParameterType == typeof(IFormFile) || p.ParameterType == typeof(IFormFileCollection) || p.CanConvertFromString || IsCollectionType(p.ParameterType))
                     {
                         return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
                     }
@@ -100,7 +104,7 @@ namespace RestModel.Generator.TypeScript.Client
                 return $"{{ {string.Join(", ", apiInfo.ParamArguments.Select(BuildParamSegment))} }}";
                 string BuildParamSegment(ArgumentInfo p)
                 {
-                    if (p.CanConvertFromString)
+                    if (p.CanConvertFromString || IsCollectionType(p.ParameterType))
                     {
                         return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
                     }
@@ -114,6 +118,20 @@ namespace RestModel.Generator.TypeScript.Client
             public string GetBody(ApiInfo apiInfo)
             {
                 return apiInfo.BodyArgument.ParameterName;
+            }
+            private bool IsCollectionType(Type type)
+            {
+                if (type.IsArray)
+                {
+                    return true;
+                }
+                if (typeof(IList).IsAssignableFrom(type))
+                {
+                    return true;
+                }
+                if (typeof(ICollection).IsAssignableFrom(type)) { return true; }
+
+                return false;
             }
         }
     }
