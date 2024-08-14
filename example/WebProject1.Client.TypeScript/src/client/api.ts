@@ -49,7 +49,7 @@ class ComplexApi extends ApiClientBase {
   public GetModelFromForm(model: ComplexObject): Promise<ComplexObject> {
     return this.send({
       url: `/Complex/GetModelFromForm`,
-      method: 'GET',
+      method: 'POST',
       forms: { ...model },
     });
   }
@@ -169,7 +169,7 @@ class SimpleApi extends ApiClientBase {
     return this.send({
       url: `/Simple/GetModelFromDefault`,
       method: 'GET',
-      params: { model:`${model}` },
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnTask(model: SimpleModel): Promise<SimpleModel> {
@@ -210,7 +210,7 @@ class SimpleApi extends ApiClientBase {
   public GetModelFromForm(model: SimpleModel): Promise<SimpleModel> {
     return this.send({
       url: `/Simple/GetModelFromForm`,
-      method: 'GET',
+      method: 'POST',
       forms: { model },
     });
   }
@@ -371,7 +371,7 @@ class DateTimeApi extends ApiClientBase {
   public GetModelFromForm(model: string): Promise<string> {
     return this.send({
       url: `/DateTime/GetModelFromForm`,
-      method: 'GET',
+      method: 'POST',
       forms: { model },
     });
   }
@@ -530,12 +530,10 @@ class IntApi extends ApiClientBase {
     });
   }
   public GetModelFromForm(model: number): Promise<number> {
-   // const fm = new FormData();
-
     return this.send({
       url: `/Int/GetModelFromForm`,
-      method: 'GET',
-      forms: {model},
+      method: 'POST',
+      forms: { model },
     });
   }
   public PostModelFromDefault(model: number): Promise<number> {
@@ -695,7 +693,7 @@ class IntArrayApi extends ApiClientBase {
   public GetModelFromForm(model: number[]): Promise<number[]> {
     return this.send({
       url: `/IntArray/GetModelFromForm`,
-      method: 'GET',
+      method: 'POST',
       forms: { model },
     });
   }
@@ -856,7 +854,7 @@ class StringApi extends ApiClientBase {
   public GetModelFromForm(model: string): Promise<string> {
     return this.send({
       url: `/String/GetModelFromForm`,
-      method: 'GET',
+      method: 'POST',
       forms: { model },
     });
   }
@@ -1115,6 +1113,20 @@ class HeaderApi extends ApiClientBase {
   public Sum(a: number, b: number): Promise<number> {
     return this.send({
       url: `/Header/Sum`,
+      method: 'GET',
+      headers: { a, b },
+    });
+  }
+  public SumArray(a: number[], b: number[]): Promise<number> {
+    return this.send({
+      url: `/Header/SumArray`,
+      method: 'GET',
+      headers: { a, b },
+    });
+  }
+  public SumArrayObject(a: SimpleModel[], b: SimpleModel[]): Promise<number> {
+    return this.send({
+      url: `/Header/SumArrayObject`,
       method: 'GET',
       headers: { a, b },
     });

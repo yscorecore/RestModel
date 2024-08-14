@@ -38,6 +38,7 @@ namespace WebProject1.Controllers
         {
             return model;
         }
+       
         [HttpGet]
         public T GetModelFromForm([FromForm] T model)
         {
@@ -137,7 +138,21 @@ namespace WebProject1.Controllers
     [ApiController]
     [Route("[controller]/[action]")]
     [AutoConstructor]
+    public partial class ComplexArrayController : BaseController<ComplexObject[]>
+    {
+
+
+    }
+    [ApiController]
+    [Route("[controller]/[action]")]
+    [AutoConstructor]
     public partial class SimpleController : BaseController<SimpleModel>
+    {
+    }
+    [ApiController]
+    [Route("[controller]/[action]")]
+    [AutoConstructor]
+    public partial class SimpleArrayController : BaseController<SimpleModel[]>
     {
     }
     [ApiController]
@@ -164,6 +179,13 @@ namespace WebProject1.Controllers
     [ApiController]
     [Route("[controller]/[action]")]
     public partial class StringController : BaseController<string>
+    {
+
+
+    }
+    [ApiController]
+    [Route("[controller]/[action]")]
+    public partial class StringArrayController : BaseController<string[]>
     {
 
 
