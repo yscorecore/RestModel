@@ -13,6 +13,9 @@ namespace RestModel
 
         public ReturnInfo ReturnInfo { get; set; }
 
+        public bool DefineAllowAnonymous { get; init; }
+        public bool DefineAuthorize { get; init; }
+
         public List<ArgumentInfo> Arguments { get; set; }
 
     }

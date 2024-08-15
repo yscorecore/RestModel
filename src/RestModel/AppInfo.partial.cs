@@ -54,7 +54,10 @@ namespace RestModel
                 HttpMethod = method.Name ?? method.HttpMethods.FirstOrDefault(),
                 RouteTemplate = route?.Template ?? method.Template,
                 ReturnInfo = CreateReturnInfo(action),
-                Arguments = action.GetParameters().Select(FromParameter).ToList()
+                Arguments = action.GetParameters().Select(FromParameter).ToList(),
+                DefineAllowAnonymous = Attribute.IsDefined(action, typeof(AllowAnonymousAttribute), true),
+                DefineAuthorize = Attribute.IsDefined(action, typeof(AuthorizeAttribute), true),
+
             };
         }
         private static bool IsActionResult(ActionInfo actionInfo)
