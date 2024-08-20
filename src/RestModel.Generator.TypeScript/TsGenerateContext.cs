@@ -5,8 +5,6 @@ namespace RestModel.Generator.TypeScript
     public record TsGenerateContext
     {
         public TsConvertOptions Options { get; init; }
-
-
         public TextWriter Output { get; init; }
     }
     public static class TsGenerateContextExtensions

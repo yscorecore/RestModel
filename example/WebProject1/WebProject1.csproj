@@ -13,6 +13,11 @@
         
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\RestModel.AspnetCore\RestModel.AspnetCore.csproj" />
+      <ProjectReference Include="..\..\src\RestModel.Generator.TypeScript\RestModel.Generator.TypeScript.csproj" />
+    </ItemGroup>
     <!--<Target Name="gen_ts" AfterTargets="Build">
         <Exec Command="dotnet restmodel2ts "/>
     </Target>-->

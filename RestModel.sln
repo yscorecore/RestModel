@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "example", "example", "{C475
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebProject1", "example\WebProject1\WebProject1.csproj", "{C07D216D-1313-498E-8712-ABB7C4B1F753}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestModel.AspnetCore", "src\RestModel.AspnetCore\RestModel.AspnetCore.csproj", "{30408EC4-5C05-4585-A200-C1F034FB0FDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{C07D216D-1313-498E-8712-ABB7C4B1F753}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C07D216D-1313-498E-8712-ABB7C4B1F753}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C07D216D-1313-498E-8712-ABB7C4B1F753}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30408EC4-5C05-4585-A200-C1F034FB0FDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30408EC4-5C05-4585-A200-C1F034FB0FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30408EC4-5C05-4585-A200-C1F034FB0FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30408EC4-5C05-4585-A200-C1F034FB0FDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{B42BD506-B08A-43C2-B72F-3C8EFA82539E} = {6C7E5914-CD6B-40F1-BFD7-8FB17E3EAE11}
 		{ABF6665B-922C-4BB6-A8C3-13C2DB2273EA} = {6C7E5914-CD6B-40F1-BFD7-8FB17E3EAE11}
 		{C07D216D-1313-498E-8712-ABB7C4B1F753} = {C47510D8-E311-4CF7-A81E-284DCC803225}
+		{30408EC4-5C05-4585-A200-C1F034FB0FDC} = {6C7E5914-CD6B-40F1-BFD7-8FB17E3EAE11}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB11BB21-3F5D-42D6-8737-F19C0666F1F8}

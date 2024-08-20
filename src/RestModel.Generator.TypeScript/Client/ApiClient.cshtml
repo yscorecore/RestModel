@@ -1,11 +1,11 @@
 ﻿@model RestModel.Generator.TypeScript.Client.ApiClient.Model
 
-class @Model.ClassName extends @Model.Options.BaseApiClassName {
+class @Model.ClassName {
 
     @foreach (var item in Model.ApiInfos)
     {
 @:  public @(Model.NewActionName(item))(@(Model.ArgumentLists(item))): Promise<@Model.ActionResultType(item)> {
-@:    return this.send({
+@:    return @(Model.Options.SendFunctionName)({
 @:      url: @(Model.GetUrl(item)),
 @:      method: '@(Model.GetMethod(item))',
     if (item.HeaderArgument.Any())
