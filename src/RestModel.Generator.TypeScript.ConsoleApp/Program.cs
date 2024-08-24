@@ -12,7 +12,7 @@ namespace RestModel.Generator.TypeScript.ConsoleApp
             //    Assemblies = "WebProject1.dll" ,
             //    //Input = @"C:\Users\yangpengbo\source\repos\obpt123\StudentMeal\StudentMeal\src\StudentMeal.ImageService\bin\Debug\net6.0",
             //    //Assemblies = "StudentMeal.*.dll",
-            //    Output = @"C:\Users\yangpengbo\source\repos\RestModel\example\WebProject1.Client.TypeScript\src\client",
+            //    Writer = @"C:\Users\yangpengbo\source\repos\RestModel\example\WebProject1.Client.TypeScript\src\client",
             //    Options = new TsConvertOptions()
 
             //});

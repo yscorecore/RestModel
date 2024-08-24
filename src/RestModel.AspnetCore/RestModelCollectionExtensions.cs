@@ -13,9 +13,9 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class RestModelCollectionExtensions
     {
-        public static IServiceCollection AddRestModel(this IServiceCollection services, Action<RestModelOptions> setupAction = null)
+        public static IServiceCollection AddRestModel(this IServiceCollection services, Action<RestModelBuildOptions> setupAction = null)
         {
-            services.TryAddTransient((IServiceProvider s) => s.GetRequiredService<IOptions<RestModelOptions>>().Value);
+            services.TryAddTransient((IServiceProvider s) => s.GetRequiredService<IOptions<RestModelBuildOptions>>().Value);
             if (setupAction != null)
             {
                 services.Configure(setupAction);

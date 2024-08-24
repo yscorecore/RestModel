@@ -8,7 +8,7 @@ namespace RestModel.Generator
     {
         static char[] SplitChars = new char[] { ',', ';' };
         public string Input { get; set; }
-        public Stream Output { get; set; }
+        public StreamWriter Writer { get; set; }
         public string Assemblies { get; set; }
         public string Controllers { get; set; }
         public ILogger Logger { get; set; }

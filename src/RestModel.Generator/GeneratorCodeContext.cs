@@ -8,7 +8,7 @@ namespace RestModel
     {
         public TOptions Options { get; init; }
         public AppInfo App { get; init; }
-        public Stream Output { get; init; }
+        public StreamWriter Writer { get; init; }
         public ILogger Logger { get; init; }
     }
 }

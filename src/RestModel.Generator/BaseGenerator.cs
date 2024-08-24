@@ -20,7 +20,7 @@ namespace RestModel.Generator
             var context = new GeneratorCodeContext<T>
             {
                 App = appInfo,
-                Output = setting.Output,
+                Writer = setting.Writer,
                 Options = options,
                 Logger = setting.Logger,
             };

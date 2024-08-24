@@ -17,7 +17,10 @@ namespace Microsoft.AspNetCore.Builder
         {
             return app.UseMiddleware<RestModelMiddleware>(new object[1] { options });
         }
-
+        public static IApplicationBuilder UseRestModel(this IApplicationBuilder app, string path)
+        {
+            return app.UseMiddleware<RestModelMiddleware>(new object[1] { new RestModelOptions { Path = path } });
+        }
 
     }
 }

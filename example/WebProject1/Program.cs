@@ -13,10 +13,11 @@ namespace WebProject1
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen();
             builder.Services.AddRestModel((t) =>
             {
-                t.Generators.Add("ts", new TypeScriptGenerator());
+                t.AddGenerator<TypeScriptGenerator>("ts");
             });
             var app = builder.Build();
 
@@ -25,10 +26,10 @@ namespace WebProject1
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                app.useRest
+                app.UseRestModel();
             }
 
-            
+
             app.UseAuthorization();
 
             app.MapControllers();

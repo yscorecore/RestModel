@@ -8,10 +8,9 @@ namespace RestModel.Generator.TypeScript
         protected override async Task GenerateCode(GeneratorCodeContext<TsConvertOptions> context)
         {
             var modelTypeMapper = GetModelMappings(context);
-            using var streamWriter = new StreamWriter(context.Output);
-            await GenerateImport(streamWriter, context, modelTypeMapper);
-            await GenerateModelFile(streamWriter, context, modelTypeMapper);
-            await GenerateApiFile(streamWriter, context, modelTypeMapper);
+            await GenerateImport(context.Writer, context, modelTypeMapper);
+            await GenerateModelFile(context.Writer, context, modelTypeMapper);
+            await GenerateApiFile(context.Writer, context, modelTypeMapper);
         }
         private IDictionary<Type, ITsType> GetModelMappings(GeneratorCodeContext<TsConvertOptions> context)
         {
