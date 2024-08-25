@@ -23,7 +23,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
             this.Name = clrType.Name;
         }
 
-        public string GetDisplayName(TsConvertOptions options)
+        public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
             return this.Name;
         }

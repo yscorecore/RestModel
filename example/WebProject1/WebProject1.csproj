@@ -18,6 +18,8 @@
       <ProjectReference Include="..\..\src\RestModel.AspnetCore\RestModel.AspnetCore.csproj" />
       <ProjectReference Include="..\..\src\RestModel.Generator.TypeScript\RestModel.Generator.TypeScript.csproj" />
     </ItemGroup>
+
+    <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
     <!--<Target Name="gen_ts" AfterTargets="Build">
         <Exec Command="dotnet restmodel2ts "/>
     </Target>-->

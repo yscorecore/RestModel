@@ -19,7 +19,7 @@ namespace WebProject1.Models
         {
             if (value is string str)
             {
-                var items = str.Split(',');
+                var items = str.Split('|');
                 if (items.Length > 1)
                 {
                     return new SimpleModel() { Id = items[0], Age = int.Parse(items[1]) };

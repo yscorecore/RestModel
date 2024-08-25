@@ -1,4 +1,6 @@
-﻿namespace RestModel.Generator.TypeScript.Models.Types
+﻿using System.ComponentModel;
+
+namespace RestModel.Generator.TypeScript.Models.Types
 {
     public class TsObject : ITsType
     {
@@ -44,9 +46,22 @@
             }
         }
 
-        public string GetDisplayName(TsConvertOptions options)
+        public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
-            return this.TypeName;
+            if (displayFormat.HasFlag(TsTypeDisplayFormat.WithString) && CanConvertFromString())
+            {
+                return $"{this.TypeName} | string";
+            }
+            else
+            {
+                return this.TypeName;
+            }
+
+        }
+        bool CanConvertFromString()
+        {
+            var converter = TypeDescriptor.GetConverter(this.ClrType);
+            return converter != null && converter.CanConvertFrom(typeof(string));
         }
         public bool HasBody(TsConvertOptions options)
         {

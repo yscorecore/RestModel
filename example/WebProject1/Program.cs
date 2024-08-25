@@ -15,6 +15,10 @@ namespace WebProject1
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddSwaggerGen();
+            builder.Services.AddHttpLogging((t) =>
+            {
+                t.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+            });
             builder.Services.AddRestModel((t) =>
             {
                 t.AddGenerator<TypeScriptGenerator>("ts");
@@ -28,8 +32,8 @@ namespace WebProject1
                 app.UseSwaggerUI();
                 app.UseRestModel();
             }
-
-
+            app.UseHttpLogging();
+            //app.UseW3CLogging();
             app.UseAuthorization();
 
             app.MapControllers();

@@ -29,7 +29,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
             return false;
         }
 
-        public string GetDisplayName(TsConvertOptions options)
+        public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
             //  { [key: MealKind]: number; } ts(1337)
             // the key not support custom object
@@ -38,12 +38,12 @@ namespace RestModel.Generator.TypeScript.Models.Types
             {
                 if (ts.Name == "string" || ts.Name == "number" || ts.Name == "symbol")
                 {
-                    return $"{{ [key: {ts.Name}]: {ValueType.GetDisplayName(options)}; }}";
+                    return $"{{ [key: {ts.Name}]: {ValueType.GetDisplayName(options, displayFormat)}; }}";
                 }
             }
             else if (this.KeyType is TsEnum)
             {
-                return $"{{ [key: string | number]: {ValueType.GetDisplayName(options)}; }}";
+                return $"{{ [key: string | number]: {ValueType.GetDisplayName(options, displayFormat)}; }}";
             }
             return "any";
 

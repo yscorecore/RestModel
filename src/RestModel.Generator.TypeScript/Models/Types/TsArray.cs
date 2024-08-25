@@ -27,15 +27,15 @@
         }
 
 
-        public string GetDisplayName(TsConvertOptions options)
+        public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
-            if (this.ItemType is TsPrimitive || this.ItemType is TsAny || this.ItemType is TsEnum || this.ItemType is TsObject)
+            if (displayFormat == TsTypeDisplayFormat.Default && (this.ItemType is TsPrimitive || this.ItemType is TsAny || this.ItemType is TsEnum || this.ItemType is TsObject))
             {
-                return $"{this.ItemType.GetDisplayName(options)}[]";
+                return $"{this.ItemType.GetDisplayName(options, displayFormat)}[]";
             }
             else
             {
-                return $"Array<{this.ItemType.GetDisplayName(options)}>";
+                return $"Array<{this.ItemType.GetDisplayName(options, displayFormat)}>";
             }
         }
 
@@ -55,7 +55,7 @@
 
         public void GenerateScript(TsGenerateContext context)
         {
-           
+
         }
         public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)
         {

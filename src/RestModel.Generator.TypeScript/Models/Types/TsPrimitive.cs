@@ -44,7 +44,7 @@
             
         }
 
-        public string GetDisplayName(TsConvertOptions options)
+        public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
             return this.Name;
         }

@@ -8,7 +8,7 @@
 
         void InitType(TsConvertContext tsConvert, Type clrType);
 
-        string GetDisplayName(TsConvertOptions options);
+        string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default);
         string GetImportName(TsConvertOptions options);
 
         bool HasBody(TsConvertOptions options);

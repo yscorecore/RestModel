@@ -12,7 +12,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
             return typeof(IFormFile).IsAssignableFrom(clrType) || typeof(IFormFileCollection).IsAssignableFrom(clrType);
         }
 
-        public string GetDisplayName(TsConvertOptions options)
+        public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
             if (typeof(IFormFile).IsAssignableFrom(this.ClrType))
             {

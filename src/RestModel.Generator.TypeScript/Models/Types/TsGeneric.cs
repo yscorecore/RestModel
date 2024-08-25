@@ -23,9 +23,9 @@
             this.GenericDefinitionType = tsConvert.TypeFactory.FromClrType(clrType.GetGenericTypeDefinition());
         }
 
-        public string GetDisplayName(TsConvertOptions options)
+        public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
-            var args = string.Join(", ", this.GenericArguments.Select(p => p.GetDisplayName(options)));
+            var args = string.Join(", ", this.GenericArguments.Select(p => p.GetDisplayName(options, displayFormat)));
             var genericDefinition = (TsGenericDefinition)this.GenericDefinitionType;
             return genericDefinition.TypeName + $"<{args}>";
         }

@@ -14,7 +14,7 @@ namespace WebProject1.Controllers
         }
         [HttpGet]
         [HttpGet]
-        [Route("{a}/{b}/{c}/{simple?}")]
+        [Route("{a}/{b}/{simple?}")]
         public int SumWithObject([FromRoute] int a, [FromRoute] int b, [FromRoute] SimpleModel simple)
         {
             return a + b +  simple.Age;

@@ -12,7 +12,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
             return true;
         }
 
-        public string GetDisplayName(TsConvertOptions options)
+        public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
             return this.PrimitiveType;
         }

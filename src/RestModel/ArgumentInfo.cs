@@ -23,11 +23,11 @@
     public enum ValueSource
     {
         None,
-        Form,
+        Form,//string
         Body,
-        Header,
+        Header,//string
         Route,
-        Query,
+        Query,//string
         Service
     }
 }

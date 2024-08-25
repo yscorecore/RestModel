@@ -51,11 +51,23 @@ namespace RestModel.Generator.TypeScript.Client
             public string GetTsTypeName(Type type) => TypeMapper[type].GetDisplayName(Options);
             public string ArgumentLists(ApiInfo apiInfo)
             {
-                var arguments = apiInfo.ActionInfo.Arguments.Select(p => $"{ParameterName(p)}: {GetTsTypeName(p.ParameterType)}");
+                var arguments = apiInfo.ActionInfo.Arguments.Select(p => $"{ParameterName(p)}: {GetArgumentListTypeName(p)}");
                 return string.Join(", ", arguments);
                 string ParameterName(ArgumentInfo argumentInfo)
                 {
                     return argumentInfo.HasDefaultValue ? $"{argumentInfo.ParameterName}?" : argumentInfo.ParameterName;
+                }
+                string GetArgumentListTypeName(ArgumentInfo argumentInfo)
+                {
+                    if (CanFromString(argumentInfo))
+                    {
+                        return TypeMapper[argumentInfo.ParameterType].GetDisplayName(Options, TsTypeDisplayFormat.WithString);
+                    }
+                    return TypeMapper[argumentInfo.ParameterType].GetDisplayName(Options);
+                }
+                bool CanFromString(ArgumentInfo argumentInfo)
+                {
+                    return argumentInfo.ValueSource == ValueSource.Form || argumentInfo.ValueSource == ValueSource.Header || argumentInfo.ValueSource == ValueSource.Query || argumentInfo.ValueSource == ValueSource.Route;
                 }
             }
             public string GetUrl(ApiInfo apiInfo)
@@ -79,7 +91,7 @@ namespace RestModel.Generator.TypeScript.Client
                 {
                     // header 不支持复杂对象
 
-                    
+
                     return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
                 }
             }
