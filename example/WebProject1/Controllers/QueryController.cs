@@ -13,7 +13,7 @@ namespace WebProject1.Controllers
             return a + b;
         }
         [HttpGet]
-        public int SumWithObject([FromQuery] int a, [FromQuery] int b, [FromHeader] ComplexObject complex, [FromHeader] SimpleModel simple)
+        public int SumWithObject([FromQuery] int a, [FromQuery] int b, [FromQuery] ComplexObject complex, [FromQuery] SimpleModel simple)
         {
             return a + b + complex.Age + simple.Age;
         }

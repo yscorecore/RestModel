@@ -31,6 +31,7 @@ namespace RestModel.Generator.TypeScript
         private async Task GenerateImport(StreamWriter streamWriter, GeneratorCodeContext<TsConvertOptions> context, IDictionary<Type, ITsType> modelTypeMapper)
         {
             await streamWriter.WriteLineAsync($"import {{ {context.Options.SendFunctionName} }} from \"{context.Options.SendFunctionImportModelName}\";");
+            await streamWriter.WriteLineAsync(string.Empty);
         }
         private Task GenerateModelFile(StreamWriter streamWriter, GeneratorCodeContext<TsConvertOptions> context, IDictionary<Type, ITsType> modelTypeMapper)
         {

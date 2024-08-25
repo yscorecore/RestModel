@@ -1,14 +1,14 @@
-import { send } from "../base";
+﻿import { send } from "../base";
 
 export interface ComplexObject {
-  id: string;
-  birthday: string | null;
-  age: number;
-  addresses: string[];
+    id: string;
+    birthday: string | null;
+    age: number;
+    addresses?: string[];
 }
 export interface SimpleModel {
-  id: string;
-  age: number;
+    id: string;
+    age: number;
 }
 
 class ComplexApi {
@@ -1648,10 +1648,29 @@ class QueryApi {
     return send({
       url: `/Query/SumWithObject`,
       method: 'GET',
-      headers: { complex, simple },
-      params: { a, b },
+      params: { a, b, ...complex, simple },
     });
   }
 }
 
 export const queryApi = new QueryApi();
+
+
+class RouteApi {
+
+  public Sum(a: number, b: number): Promise<number> {
+    return send({
+      url: `/Route/Sum/${a}/${b}`,
+      method: 'GET',
+    });
+  }
+  public SumWithObject(a: number, b: number, simple: SimpleModel | string): Promise<number> {
+    return send({
+      url: `/Route/SumWithObject/${a}/${b}/${simple}`,
+      method: 'GET',
+    });
+  }
+}
+
+export const routeApi = new RouteApi();
+

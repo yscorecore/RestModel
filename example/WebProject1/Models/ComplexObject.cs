@@ -2,9 +2,9 @@
 {
     public class ComplexObject
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public DateTime? Birthday { get; set; }
         public int Age { get; set; }
-        public List<string> Addresses { get; set; }
+        public List<string>? Addresses { get; set; }
     }
 }

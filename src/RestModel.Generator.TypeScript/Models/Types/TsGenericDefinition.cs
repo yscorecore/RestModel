@@ -29,7 +29,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
             this.TypeName = tsConvert.TypeFactory.Request(clrType.Name.Substring(0, clrType.Name.IndexOf('`')));
             this.Fields = clrType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
               .Where(p => p.DeclaringType == clrType)
-              .Select(p => new TsField(p.Name, tsConvert.TypeFactory.FromClrType(p.PropertyType)))
+              .Select(p => new TsField(p.Name, p.IsRequired(), tsConvert.TypeFactory.FromClrType(p.PropertyType)))
              .ToList();
 
             if (!IsRootType())
@@ -42,41 +42,14 @@ namespace RestModel.Generator.TypeScript.Models.Types
                 .Select(tsConvert.TypeFactory.FromClrType)
                 .ToList();
 
-            
+
 
             bool IsRootType()
             {
                 return clrType.BaseType == null || clrType.BaseType == typeof(object);
             }
-            PropertyAssignKind IsNullableProperty(PropertyInfo prop)
-            {
-                if (prop.GetCustomAttribute<RequiredAttribute>() != null)
-                {
-                    return PropertyAssignKind.Required;
-                }
-
-                const string nullableAttributeFullName = "System.Runtime.CompilerServices.NullableAttribute";
-                var isAssemblyNullable = prop.DeclaringType.Assembly.GetType(nullableAttributeFullName) != null;
-
-                if (isAssemblyNullable)
-                {
-                    var propHasNullable = prop.GetCustomAttributesData()
-                        .Any(p => p.AttributeType.FullName == nullableAttributeFullName);
-                    if (propHasNullable)
-                    {
-                        return PropertyAssignKind.Nullable;
-                    }
-                }
-                else
-                {
-                    if (prop.PropertyType.IsValueType && Nullable.GetUnderlyingType(prop.PropertyType) != null)
-                    {
-                        return PropertyAssignKind.Nullable;
-                    }
-                }
-                return PropertyAssignKind.Unknown;
-            }
         }
+
 
         public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
@@ -96,7 +69,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
             var title = Parent is null ?
                 $"export interface {GetDisplayName(context.Options)}"
                 : $"export interface {GetDisplayName(context.Options)} extends {BuildParentName()}";
-            var contents = Fields.Select(item => $"{convertFunc(item.Name)}: {item.Type.GetDisplayName(context.Options)};");
+            var contents = Fields.Select(item => $"{convertFunc(item.Name)}{RequiredFlag(item)}: {item.Type.GetDisplayName(context.Options)};");
 
 
             context.WriteBlock(title, contents);
@@ -111,6 +84,10 @@ namespace RestModel.Generator.TypeScript.Models.Types
                 {
                     return this.Parent.GetDisplayName(context.Options);
                 }
+            }
+            string RequiredFlag(TsField field)
+            {
+                return field.Required ? string.Empty : "?";
             }
         }
         public IEnumerable<ITsType> GetDeclareDependencyTypes(TsConvertOptions options)

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace RestModel.Generator.TypeScript.Models.Types
 {
@@ -29,7 +30,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
 
             this.Fields = clrType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
                 .Where(p => p.DeclaringType == clrType)
-                .Select(p => new TsField(p.Name, tsConvert.TypeFactory.FromClrType(p.PropertyType)))
+                .Select(p => new TsField(p.Name, p.IsRequired(), tsConvert.TypeFactory.FromClrType(p.PropertyType)))
                 .ToList();
 
             if (!IsRootType())
@@ -76,7 +77,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
             var title = Parent is null ?
                 $"export interface {TypeName}"
                 : $"export interface {TypeName} extends {BuildParentName()}";
-            var contents = Fields.Select(item => $"{convertFunc(item.Name)}: {item.Type.GetDisplayName(context.Options)};");
+            var contents = Fields.Select(item => $"{convertFunc(item.Name)}{RequiredFlag(item)}: {item.Type.GetDisplayName(context.Options)};");
 
             context.WriteBlock(title, contents);
             string BuildParentName()
@@ -89,6 +90,10 @@ namespace RestModel.Generator.TypeScript.Models.Types
                 {
                     return this.Parent.GetDisplayName(context.Options);
                 }
+            }
+            string RequiredFlag(TsField field)
+            {
+                return field.Required ? string.Empty : "?";
             }
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestModel.Generator.TypeScript.Models
 {
-    public record TsField(string Name,  ITsType Type);
+    public record TsField(string Name, bool Required, ITsType Type);
 
     public enum PropertyAssignKind
     {

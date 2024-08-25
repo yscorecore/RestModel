@@ -7,12 +7,12 @@ namespace WebProject1.Controllers
     public class RouteController : ControllerBase
     {
         [HttpGet]
-        [Route("a/{b:int}")]
+        [Route("{a}/{b:int}")]
         public int Sum([FromRoute] int a, [FromRoute] int b)
         {
             return a + b;
         }
-        [HttpGet]
+
         [HttpGet]
         [Route("{a}/{b}/{simple?}")]
         public int SumWithObject([FromRoute] int a, [FromRoute] int b, [FromRoute] SimpleModel simple)

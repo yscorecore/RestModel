@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -94,19 +95,22 @@ namespace RestModel.AspnetCore
                 context.Response.StatusCode = StatusCodes.Status200OK;
                 context.Response.ContentType = "text/plain";
                 var arguments = context.Request.Query.ToDictionary(p => p.Key, p => p.Value.Count == 1 ? (object)p.Value.ToString() : p.Value.ToArray());
-                await using var memoryStream = new MemoryStream();
-                await using var writer = new StreamWriter(memoryStream);
+                //await using var memoryStream = new MemoryStream();
+                //await using var writer = new StreamWriter(memoryStream);
+
+                await using var writer1 = new StreamWriter(context.Response.Body, Encoding.UTF8);
                 var settings = new GeneratorSetting()
                 {
                     Logger = logger,
-                    Writer = writer,
+                    Writer = writer1,
                     Input = AppContext.BaseDirectory,
                     Assemblies = buildOptions.Assemblies,
                     Controllers = buildOptions.Controllers,
                 };
                 await generator.Generator(settings, arguments);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                await memoryStream.CopyToAsync(context.Response.Body);
+                await writer1.FlushAsync();
+                // memoryStream.Seek(0, SeekOrigin.Begin);
+                // await memoryStream.CopyToAsync(context.Response.Body);
             }
             catch (Exception ex)
             {
