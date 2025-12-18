@@ -77,7 +77,7 @@ namespace RestModel
             ArgumentInfo BuildBodyContent(List<ArgumentInfo> usedArguments)
             {
                 var bodyArguments = actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Body).ToList();
-                var complexArguments = actionInfo.Arguments.Except(usedArguments).Where(p => p.ValueSource == ValueSource.None && !p.CanConvertFromString).ToList();
+                var complexArguments = actionInfo.Arguments.Except(usedArguments).Where(p => p.ValueSource == ValueSource.None).ToList();
 
                 var item = bodyArguments.Union(complexArguments).FirstOrDefault();
                 // body 只运行有一个
@@ -91,7 +91,10 @@ namespace RestModel
             List<ArgumentInfo> BuildParamsContent(List<ArgumentInfo> usedArguments)
             {
                 var queryArguments = actionInfo.Arguments.Where(p => p.ValueSource == ValueSource.Query).ToList();
-                var simpleArguments = actionInfo.Arguments.Except(usedArguments).Where(p => p.ValueSource == ValueSource.None && p.CanConvertFromString).ToList();
+                var simpleArguments = actionInfo.Arguments
+                    .Except(usedArguments)
+                    .Where(p => p.ValueSource == ValueSource.None)
+                    .ToList();
 
                 var items = queryArguments.Union(simpleArguments).ToList();
                 usedArguments.AddRange(items);

@@ -7,10 +7,14 @@
 
   <ItemGroup>
     <None Remove="Client\ApiClient.cshtml" />
+    <None Remove="Client\ApiClientTest.cshtml" />
     <None Remove="Client\Base.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Client\ApiClientTest.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Client\Base.ts">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>

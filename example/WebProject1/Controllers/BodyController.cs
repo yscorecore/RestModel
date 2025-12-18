@@ -29,7 +29,7 @@ namespace WebProject1.Controllers
 
     [ApiController]
     [Route("[controller]/[action]")]
-    public class BodyController : BodyBaseController<int>
+    public class IntBodyController : BodyBaseController<int>
     {
        
     }

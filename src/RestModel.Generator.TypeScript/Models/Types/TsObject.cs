@@ -49,15 +49,16 @@ namespace RestModel.Generator.TypeScript.Models.Types
 
         public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
+            List<string> names = new List<string> { this.TypeName };
             if (displayFormat.HasFlag(TsTypeDisplayFormat.WithString) && CanConvertFromString())
             {
-                return $"{this.TypeName} | string";
+                names.Add("string");
             }
-            else
+            if (displayFormat.HasFlag(TsTypeDisplayFormat.WithNull))
             {
-                return this.TypeName;
+                names.Add("null");
             }
-
+            return string.Join(" | ", names);
         }
         bool CanConvertFromString()
         {
@@ -77,7 +78,8 @@ namespace RestModel.Generator.TypeScript.Models.Types
             var title = Parent is null ?
                 $"export interface {TypeName}"
                 : $"export interface {TypeName} extends {BuildParentName()}";
-            var contents = Fields.Select(item => $"{convertFunc(item.Name)}{RequiredFlag(item)}: {item.Type.GetDisplayName(context.Options)};");
+            
+            var contents = Fields.Select(item => $"{convertFunc(item.Name)}{RequiredFlag(item)}: {item.Type.GetDisplayName(context.Options, item.Required ? TsTypeDisplayFormat.Default : TsTypeDisplayFormat.WithNull)};");
 
             context.WriteBlock(title, contents);
             string BuildParentName()

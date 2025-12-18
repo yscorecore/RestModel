@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Http;
 
 namespace RestModel
 {
@@ -25,16 +26,26 @@ namespace RestModel
         {
             foreach (var arg in action.Arguments)
             {
-                yield return arg.ParameterType;
-
+                var type = arg.ReceiveType.Type;
+                if (!IsSpecial(type))
+                {
+                    yield return arg.ReceiveType.Type;
+                }
             }
             if (action.ReturnInfo.ResultType != null)
             {
                 yield return action.ReturnInfo.ResultType;
             }
+            bool IsSpecial(Type type)
+            {
+                return type == typeof(CancellationToken)
+                    || type == typeof(IFormFile)
+                    || type == typeof(IFormFileCollection)
+                    || type == typeof(IFormCollection);
+            }
 
         }
     }
 
-    
+
 }

@@ -5,6 +5,6 @@
     {
         Default = 0,
         WithString = 1,
-
+        WithNull = 2,
     }
 }

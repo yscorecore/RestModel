@@ -59,16 +59,10 @@ namespace RestModel.Generator.TypeScript.Client
                 }
                 string GetArgumentListTypeName(ArgumentInfo argumentInfo)
                 {
-                    if (CanFromString(argumentInfo))
-                    {
-                        return TypeMapper[argumentInfo.ParameterType].GetDisplayName(Options, TsTypeDisplayFormat.WithString);
-                    }
-                    return TypeMapper[argumentInfo.ParameterType].GetDisplayName(Options);
+                   return TypeMapper[argumentInfo.ReceiveType.Type].GetDisplayName(Options);
                 }
-                bool CanFromString(ArgumentInfo argumentInfo)
-                {
-                    return argumentInfo.ValueSource == ValueSource.Form || argumentInfo.ValueSource == ValueSource.Header || argumentInfo.ValueSource == ValueSource.Query || argumentInfo.ValueSource == ValueSource.Route;
-                }
+
+
             }
             public string GetUrl(ApiInfo apiInfo)
             {
@@ -100,14 +94,14 @@ namespace RestModel.Generator.TypeScript.Client
                 return $"{{ {string.Join(", ", apiInfo.FormArguments.Select(BuildFormSegment))} }}";
                 string BuildFormSegment(ArgumentInfo p)
                 {
-                    if (p.ParameterType == typeof(IFormFile) || p.ParameterType == typeof(IFormFileCollection) || p.CanConvertFromString || IsCollectionType(p.ParameterType))
+
+                    if (p.ReceiveType.IsComplex)
                     {
-                        return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
+                        return $"...{p.ParameterName}";
                     }
                     else
                     {
-                        //复杂类型
-                        return $"...{p.ParameterName}";
+                        return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
                     }
                 }
             }
@@ -116,14 +110,13 @@ namespace RestModel.Generator.TypeScript.Client
                 return $"{{ {string.Join(", ", apiInfo.ParamArguments.Select(BuildParamSegment))} }}";
                 string BuildParamSegment(ArgumentInfo p)
                 {
-                    if (p.CanConvertFromString || IsCollectionType(p.ParameterType))
+                    if (p.ReceiveType.IsComplex)
                     {
-                        return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
+                        return $"...{p.ParameterName}";
                     }
                     else
                     {
-                        //复杂类型
-                        return $"...{p.ParameterName}";
+                        return p.ValueName is null ? p.ParameterName : $"{p.ValueName}:{p.ParameterName}";
                     }
                 }
             }
@@ -131,20 +124,9 @@ namespace RestModel.Generator.TypeScript.Client
             {
                 return apiInfo.BodyArgument.ParameterName;
             }
-            private bool IsCollectionType(Type type)
-            {
-                if (type.IsArray)
-                {
-                    return true;
-                }
-                if (typeof(IList).IsAssignableFrom(type))
-                {
-                    return true;
-                }
-                if (typeof(ICollection).IsAssignableFrom(type)) { return true; }
+           
 
-                return false;
-            }
+        
         }
     }
 }

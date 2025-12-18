@@ -41,11 +41,18 @@
 
         public void GenerateScript(TsGenerateContext context)
         {
-            
+
         }
 
         public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
+            if (displayFormat == TsTypeDisplayFormat.WithNull)
+            {
+                if (this.Name.Equals("string"))
+                {
+                    return $"{this.Name} | null";
+                }
+            }
             return this.Name;
         }
 

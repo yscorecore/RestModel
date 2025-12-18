@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.ComponentModel;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 
@@ -25,6 +27,7 @@ namespace RestModel
         }
         private static ControllerInfo FromControllerType(Type type)
         {
+            var typeName = type.Name;
             return new ControllerInfo
             {
                 ClassName = type.Name,
@@ -45,6 +48,8 @@ namespace RestModel
         }
         private static ActionInfo FromActionMethod(MethodInfo action)
         {
+            var name = action.Name;
+            
             var method = action.GetCustomAttributes<HttpMethodAttribute>(true).FirstOrDefault();
             var route = action.GetCustomAttributes<RouteAttribute>(true).FirstOrDefault();
             return new ActionInfo
@@ -83,15 +88,20 @@ namespace RestModel
         private static ArgumentInfo FromParameter(ParameterInfo parameter)
         {
             var (name, source) = GetValueInfo();
+
+            var paremeterTypeInfo = default(ArgumentTypeInfo);
+
+
+            var isRequired = parameter.IsRequired();
+            var receiveType = GetReceiveType(source, parameter.ParameterType, isRequired);
             return new ArgumentInfo
             {
-                ParameterName = parameter.Name,
-                DefineAllowAnonymous = Attribute.IsDefined(parameter, typeof(AllowAnonymousAttribute), true),
-                DefineAuthorize = Attribute.IsDefined(parameter, typeof(AuthorizeAttribute), true),
-                ParameterType = parameter.ParameterType,
-                CanConvertFromString = CanConvertFromString(parameter),
                 ValueSource = source,
                 ValueName = name,
+                ParameterName = parameter.Name,
+                ParameterType = parameter.ParameterType,
+                IsRequired = parameter.IsRequired(),
+                ReceiveType = GetReceiveType(source, parameter.ParameterType, isRequired),
                 HasDefaultValue = parameter.HasDefaultValue,
                 DefaultValue = parameter.RawDefaultValue
             };
@@ -111,11 +121,182 @@ namespace RestModel
                 if (fromBody != null) return (null, ValueSource.Body);
                 return (null, ValueSource.None);
             }
-            bool CanConvertFromString(ParameterInfo type)
+
+
+            bool IsCollectionType(Type type)
             {
-                var converter = TypeDescriptor.GetConverter(type.ParameterType);
-                return converter != null && converter.CanConvertFrom(typeof(string));
+                if (type == typeof(string))
+                {
+                    return false;
+                }
+                if (type.IsArray)
+                {
+                    return true;
+                }
+                if (typeof(IList).IsAssignableFrom(type))
+                {
+                    return true;
+                }
+                if (typeof(ICollection).IsAssignableFrom(type)) { return true; }
+
+                return false;
             }
+
+            ArgumentTypeInfo GetReceiveType(ValueSource source, Type type, bool isRequired)
+            {
+                if (typeof(IFormFile) == type || typeof(IFormFile).IsAssignableFrom(type))
+                {
+                    return new ArgumentTypeInfo
+                    {
+                        IsFile = true,
+                        Type = type
+                    };
+                }
+                if (typeof(IFormFileCollection) == type ||
+                    typeof(IFormFileCollection).IsAssignableFrom(type) ||
+                    GetItemType(type) == typeof(IFormFile))
+                {
+                    return new ArgumentTypeInfo
+                    {
+                        IsFile = true,
+                        IsCollection = true,
+                        Type = type,
+                        ItemType = typeof(IFormFile)
+                    };
+                }
+
+                if (IsPlainSource(source))
+                {
+                    if (IsCollectionType(type))
+                    {
+                        var itemType = GetItemType(type);
+                        var originalType = Nullable.GetUnderlyingType(itemType) ?? itemType;
+                        if (IsStringObjectType(originalType))
+                        {
+                            return new ArgumentTypeInfo
+                            {
+                                Type = typeof(List<string>),
+                                IsCollection = true,
+                                IsRequired = isRequired,
+                                ItemType = typeof(string)
+                            };
+                        }
+                    }
+                    else
+                    {
+                        var originalType = Nullable.GetUnderlyingType(type);
+                        if (originalType != null)
+                        {
+                            if (IsStringObjectType(originalType))
+                            {
+                                return new ArgumentTypeInfo
+                                {
+                                    Type = typeof(string),
+                                    IsRequired = false,
+                                };
+                            }
+                        }
+                        else
+                        {
+                            if (IsStringObjectType(type))
+                            {
+                                return new ArgumentTypeInfo
+                                {
+                                    Type = typeof(string),
+                                    IsRequired = true,
+                                };
+                            }
+                        }
+                    }
+                }
+                return new ArgumentTypeInfo
+                {
+                    Type = type,
+                    IsRequired = isRequired,
+                    IsCollection = IsCollectionType(type),
+                    ItemType = GetItemType(type),
+                };
+            }
+            bool IsStringObjectType(Type type)
+            {
+                if (Type.GetTypeCode(type) == TypeCode.Object)
+                {
+                    var converter = TypeDescriptor.GetConverter(type);
+                    return converter != null && converter.CanConvertFrom(typeof(string));
+                }
+                return false;
+            }
+            bool IsPlainSource(ValueSource source)
+            {
+                return source == ValueSource.Form ||
+                     source == ValueSource.Header ||
+                     source == ValueSource.Query ||
+                     source == ValueSource.Route;
+            }
+            Type GetItemType(Type clrType)
+            {
+                if (clrType.IsArray)
+                {
+                    return clrType.GetElementType();
+
+                }
+                if (clrType.IsGenericType)
+                {
+                    return clrType.GetGenericArguments().SingleOrDefault();
+                }
+                return null;
+            }
+        }
+
+        private static ArgumentInfo FromParameter2(ParameterInfo parameter)
+        {
+            var (name, source) = GetValueInfo();
+            var parameterInfo = GetParameterTypeInfo();
+
+            return null;
+            (string, ValueSource) GetValueInfo()
+            {
+                var fromForm = parameter.GetCustomAttribute<FromFormAttribute>(true);
+                if (fromForm != null) return (fromForm.Name, ValueSource.Form);
+                var fromService = parameter.GetCustomAttribute<FromServicesAttribute>(true);
+                if (fromService != null) return (null, ValueSource.Service);
+                var fromRoute = parameter.GetCustomAttribute<FromRouteAttribute>(true);
+                if (fromRoute != null) return (fromRoute.Name, ValueSource.Route);
+                var fromQuery = parameter.GetCustomAttribute<FromQueryAttribute>(true);
+                if (fromQuery != null) return (fromQuery.Name, ValueSource.Query);
+                var fromHeader = parameter.GetCustomAttribute<FromHeaderAttribute>(true);
+                if (fromHeader != null) return (fromHeader.Name, ValueSource.Header);
+                var fromBody = parameter.GetCustomAttribute<FromBodyAttribute>(true);
+                if (fromBody != null) return (null, ValueSource.Body);
+                return (null, ValueSource.None);
+            }
+            ValueSource InferNoneValueSource(ParameterTypeInfo pInfo,string method) 
+            {
+                if (pInfo.IsComplex)
+                {
+                    if (pInfo.CanConvertFromString && method.Equals("get", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        return ValueSource.Query;
+                    }
+                }
+                return ValueSource.Query;
+
+            }
+
+            ParameterTypeInfo GetParameterTypeInfo()
+            {
+                return null;
+            }
+        }
+
+        record ParameterTypeInfo
+        {
+            public Type Type { get; set; }
+            public bool Required { get; set; }
+            public bool IsCollection { get; set; }
+            public bool CanConvertFromString { get; set; }
+            public Type ItemType { get; set; }
+            public bool IsComplex { get; set; }
         }
     }
 }

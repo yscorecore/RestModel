@@ -29,21 +29,11 @@ namespace WebProject1.Controllers
             return model;
         }
         [HttpGet]
-        public T GetModelFromHeader([FromHeader] T model)
-        {
-            return model;
-        }
-        [HttpGet]
         public T GetModelFromBody([FromBody] T model)
         {
             return model;
         }
        
-        [HttpGet]
-        public T GetModelFromForm([FromForm] T model)
-        {
-            return model;
-        }
 
         [HttpPost]
         public T PostModelFromDefault(T model)
@@ -52,11 +42,6 @@ namespace WebProject1.Controllers
         }
         [HttpPost]
         public T PostModelFromQuery([FromQuery] T model)
-        {
-            return model;
-        }
-        [HttpPost]
-        public T PostModelFromHeader([FromHeader] T model)
         {
             return model;
         }
@@ -83,11 +68,6 @@ namespace WebProject1.Controllers
             return model;
         }
         [HttpPut]
-        public T PutModelFromHeader([FromHeader] T model)
-        {
-            return model;
-        }
-        [HttpPut]
         public T PutModelFromBody([FromBody] T model)
         {
             return model;
@@ -110,17 +90,7 @@ namespace WebProject1.Controllers
             return model;
         }
         [HttpDelete]
-        public T DeleteModelFromHeader([FromHeader] T model)
-        {
-            return model;
-        }
-        [HttpDelete]
         public T DeleteModelFromBody([FromBody] T model)
-        {
-            return model;
-        }
-        [HttpDelete]
-        public T DeleteModelFromForm([FromForm] T model)
         {
             return model;
         }
@@ -186,6 +156,20 @@ namespace WebProject1.Controllers
     [ApiController]
     [Route("[controller]/[action]")]
     public partial class StringArrayController : BaseController<string[]>
+    {
+
+
+    }
+    [ApiController]
+    [Route("[controller]/[action]")]
+    public partial class TimeSpanController : BaseController<TimeSpan>
+    {
+
+
+    }
+    [ApiController]
+    [Route("[controller]/[action]")]
+    public partial class TimeSpanArrayController : BaseController<TimeSpan[]>
     {
 
 

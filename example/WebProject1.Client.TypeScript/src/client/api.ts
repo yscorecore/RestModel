@@ -2,9 +2,9 @@
 
 export interface ComplexObject {
     id: string;
-    birthday: string | null;
+    birthday?: string | null;
     age: number;
-    addresses?: string[];
+    addresses?: Array<string | null> | null;
 }
 export interface SimpleModel {
     id: string;
@@ -17,35 +17,28 @@ class ComplexApi {
     return send({
       url: `/Complex/GetModelFromDefault`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnTask(model: ComplexObject): Promise<ComplexObject> {
     return send({
       url: `/Complex/GetModelFromDefaultAndReturnTask`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnValueTask(model: ComplexObject): Promise<ComplexObject> {
     return send({
       url: `/Complex/GetModelFromDefaultAndReturnValueTask`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromQuery(model: ComplexObject): Promise<ComplexObject> {
     return send({
       url: `/Complex/GetModelFromQuery`,
       method: 'GET',
-      params: { ...model },
-    });
-  }
-  public GetModelFromHeader(model: ComplexObject): Promise<ComplexObject> {
-    return send({
-      url: `/Complex/GetModelFromHeader`,
-      method: 'GET',
-      headers: { model },
+      params: { model },
     });
   }
   public GetModelFromBody(model: ComplexObject): Promise<ComplexObject> {
@@ -55,32 +48,18 @@ class ComplexApi {
       body: model,
     });
   }
-  public GetModelFromForm(model: ComplexObject): Promise<ComplexObject> {
-    return send({
-      url: `/Complex/GetModelFromForm`,
-      method: 'GET',
-      forms: { ...model },
-    });
-  }
   public PostModelFromDefault(model: ComplexObject): Promise<ComplexObject> {
     return send({
       url: `/Complex/PostModelFromDefault`,
       method: 'POST',
-      body: model,
+      params: { model },
     });
   }
   public PostModelFromQuery(model: ComplexObject): Promise<ComplexObject> {
     return send({
       url: `/Complex/PostModelFromQuery`,
       method: 'POST',
-      params: { ...model },
-    });
-  }
-  public PostModelFromHeader(model: ComplexObject): Promise<ComplexObject> {
-    return send({
-      url: `/Complex/PostModelFromHeader`,
-      method: 'POST',
-      headers: { model },
+      params: { model },
     });
   }
   public PostModelFromBody(model: ComplexObject): Promise<ComplexObject> {
@@ -94,28 +73,21 @@ class ComplexApi {
     return send({
       url: `/Complex/PostModelFromForm`,
       method: 'POST',
-      forms: { ...model },
+      forms: { model },
     });
   }
   public PutModelFromDefault(model: ComplexObject): Promise<ComplexObject> {
     return send({
       url: `/Complex/PutModelFromDefault`,
       method: 'PUT',
-      body: model,
+      params: { model },
     });
   }
   public PutModelFromQuery(model: ComplexObject): Promise<ComplexObject> {
     return send({
       url: `/Complex/PutModelFromQuery`,
       method: 'PUT',
-      params: { ...model },
-    });
-  }
-  public PutModelFromHeader(model: ComplexObject): Promise<ComplexObject> {
-    return send({
-      url: `/Complex/PutModelFromHeader`,
-      method: 'PUT',
-      headers: { model },
+      params: { model },
     });
   }
   public PutModelFromBody(model: ComplexObject): Promise<ComplexObject> {
@@ -129,28 +101,21 @@ class ComplexApi {
     return send({
       url: `/Complex/PutModelFromForm`,
       method: 'PUT',
-      forms: { ...model },
+      forms: { model },
     });
   }
   public DeleteModelFromDefault(model: ComplexObject): Promise<ComplexObject> {
     return send({
       url: `/Complex/DeleteModelFromDefault`,
       method: 'DELETE',
-      body: model,
+      params: { model },
     });
   }
   public DeleteModelFromQuery(model: ComplexObject): Promise<ComplexObject> {
     return send({
       url: `/Complex/DeleteModelFromQuery`,
       method: 'DELETE',
-      params: { ...model },
-    });
-  }
-  public DeleteModelFromHeader(model: ComplexObject): Promise<ComplexObject> {
-    return send({
-      url: `/Complex/DeleteModelFromHeader`,
-      method: 'DELETE',
-      headers: { model },
+      params: { model },
     });
   }
   public DeleteModelFromBody(model: ComplexObject): Promise<ComplexObject> {
@@ -158,13 +123,6 @@ class ComplexApi {
       url: `/Complex/DeleteModelFromBody`,
       method: 'DELETE',
       body: model,
-    });
-  }
-  public DeleteModelFromForm(model: ComplexObject): Promise<ComplexObject> {
-    return send({
-      url: `/Complex/DeleteModelFromForm`,
-      method: 'DELETE',
-      forms: { ...model },
     });
   }
 }
@@ -178,35 +136,28 @@ class ComplexArrayApi {
     return send({
       url: `/ComplexArray/GetModelFromDefault`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnTask(model: ComplexObject[]): Promise<ComplexObject[]> {
     return send({
       url: `/ComplexArray/GetModelFromDefaultAndReturnTask`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnValueTask(model: ComplexObject[]): Promise<ComplexObject[]> {
     return send({
       url: `/ComplexArray/GetModelFromDefaultAndReturnValueTask`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
-  public GetModelFromQuery(model: Array<ComplexObject>): Promise<ComplexObject[]> {
+  public GetModelFromQuery(model: ComplexObject[]): Promise<ComplexObject[]> {
     return send({
       url: `/ComplexArray/GetModelFromQuery`,
       method: 'GET',
       params: { model },
-    });
-  }
-  public GetModelFromHeader(model: Array<ComplexObject>): Promise<ComplexObject[]> {
-    return send({
-      url: `/ComplexArray/GetModelFromHeader`,
-      method: 'GET',
-      headers: { model },
     });
   }
   public GetModelFromBody(model: ComplexObject[]): Promise<ComplexObject[]> {
@@ -216,32 +167,18 @@ class ComplexArrayApi {
       body: model,
     });
   }
-  public GetModelFromForm(model: Array<ComplexObject>): Promise<ComplexObject[]> {
-    return send({
-      url: `/ComplexArray/GetModelFromForm`,
-      method: 'GET',
-      forms: { model },
-    });
-  }
   public PostModelFromDefault(model: ComplexObject[]): Promise<ComplexObject[]> {
     return send({
       url: `/ComplexArray/PostModelFromDefault`,
       method: 'POST',
-      body: model,
+      params: { model },
     });
   }
-  public PostModelFromQuery(model: Array<ComplexObject>): Promise<ComplexObject[]> {
+  public PostModelFromQuery(model: ComplexObject[]): Promise<ComplexObject[]> {
     return send({
       url: `/ComplexArray/PostModelFromQuery`,
       method: 'POST',
       params: { model },
-    });
-  }
-  public PostModelFromHeader(model: Array<ComplexObject>): Promise<ComplexObject[]> {
-    return send({
-      url: `/ComplexArray/PostModelFromHeader`,
-      method: 'POST',
-      headers: { model },
     });
   }
   public PostModelFromBody(model: ComplexObject[]): Promise<ComplexObject[]> {
@@ -251,7 +188,7 @@ class ComplexArrayApi {
       body: model,
     });
   }
-  public PostModelFromForm(model: Array<ComplexObject>): Promise<ComplexObject[]> {
+  public PostModelFromForm(model: ComplexObject[]): Promise<ComplexObject[]> {
     return send({
       url: `/ComplexArray/PostModelFromForm`,
       method: 'POST',
@@ -262,21 +199,14 @@ class ComplexArrayApi {
     return send({
       url: `/ComplexArray/PutModelFromDefault`,
       method: 'PUT',
-      body: model,
+      params: { model },
     });
   }
-  public PutModelFromQuery(model: Array<ComplexObject>): Promise<ComplexObject[]> {
+  public PutModelFromQuery(model: ComplexObject[]): Promise<ComplexObject[]> {
     return send({
       url: `/ComplexArray/PutModelFromQuery`,
       method: 'PUT',
       params: { model },
-    });
-  }
-  public PutModelFromHeader(model: Array<ComplexObject>): Promise<ComplexObject[]> {
-    return send({
-      url: `/ComplexArray/PutModelFromHeader`,
-      method: 'PUT',
-      headers: { model },
     });
   }
   public PutModelFromBody(model: ComplexObject[]): Promise<ComplexObject[]> {
@@ -286,7 +216,7 @@ class ComplexArrayApi {
       body: model,
     });
   }
-  public PutModelFromForm(model: Array<ComplexObject>): Promise<ComplexObject[]> {
+  public PutModelFromForm(model: ComplexObject[]): Promise<ComplexObject[]> {
     return send({
       url: `/ComplexArray/PutModelFromForm`,
       method: 'PUT',
@@ -297,21 +227,14 @@ class ComplexArrayApi {
     return send({
       url: `/ComplexArray/DeleteModelFromDefault`,
       method: 'DELETE',
-      body: model,
+      params: { model },
     });
   }
-  public DeleteModelFromQuery(model: Array<ComplexObject>): Promise<ComplexObject[]> {
+  public DeleteModelFromQuery(model: ComplexObject[]): Promise<ComplexObject[]> {
     return send({
       url: `/ComplexArray/DeleteModelFromQuery`,
       method: 'DELETE',
       params: { model },
-    });
-  }
-  public DeleteModelFromHeader(model: Array<ComplexObject>): Promise<ComplexObject[]> {
-    return send({
-      url: `/ComplexArray/DeleteModelFromHeader`,
-      method: 'DELETE',
-      headers: { model },
     });
   }
   public DeleteModelFromBody(model: ComplexObject[]): Promise<ComplexObject[]> {
@@ -319,13 +242,6 @@ class ComplexArrayApi {
       url: `/ComplexArray/DeleteModelFromBody`,
       method: 'DELETE',
       body: model,
-    });
-  }
-  public DeleteModelFromForm(model: Array<ComplexObject>): Promise<ComplexObject[]> {
-    return send({
-      url: `/ComplexArray/DeleteModelFromForm`,
-      method: 'DELETE',
-      forms: { model },
     });
   }
 }
@@ -356,18 +272,11 @@ class SimpleApi {
       params: { model },
     });
   }
-  public GetModelFromQuery(model: SimpleModel | string): Promise<SimpleModel> {
+  public GetModelFromQuery(model: string): Promise<SimpleModel> {
     return send({
       url: `/Simple/GetModelFromQuery`,
       method: 'GET',
       params: { model },
-    });
-  }
-  public GetModelFromHeader(model: SimpleModel | string): Promise<SimpleModel> {
-    return send({
-      url: `/Simple/GetModelFromHeader`,
-      method: 'GET',
-      headers: { model },
     });
   }
   public GetModelFromBody(model: SimpleModel): Promise<SimpleModel> {
@@ -377,32 +286,18 @@ class SimpleApi {
       body: model,
     });
   }
-  public GetModelFromForm(model: SimpleModel | string): Promise<SimpleModel> {
-    return send({
-      url: `/Simple/GetModelFromForm`,
-      method: 'GET',
-      forms: { model },
-    });
-  }
-  public PostModelFromDefault(model: SimpleModel): Promise<SimpleModel> {
+  public PostModelFromDefault(model: string): Promise<SimpleModel> {
     return send({
       url: `/Simple/PostModelFromDefault`,
       method: 'POST',
       params: { model },
     });
   }
-  public PostModelFromQuery(model: SimpleModel | string): Promise<SimpleModel> {
+  public PostModelFromQuery(model: string): Promise<SimpleModel> {
     return send({
       url: `/Simple/PostModelFromQuery`,
       method: 'POST',
       params: { model },
-    });
-  }
-  public PostModelFromHeader(model: SimpleModel | string): Promise<SimpleModel> {
-    return send({
-      url: `/Simple/PostModelFromHeader`,
-      method: 'POST',
-      headers: { model },
     });
   }
   public PostModelFromBody(model: SimpleModel): Promise<SimpleModel> {
@@ -412,7 +307,7 @@ class SimpleApi {
       body: model,
     });
   }
-  public PostModelFromForm(model: SimpleModel | string): Promise<SimpleModel> {
+  public PostModelFromForm(model: string): Promise<SimpleModel> {
     return send({
       url: `/Simple/PostModelFromForm`,
       method: 'POST',
@@ -426,18 +321,11 @@ class SimpleApi {
       params: { model },
     });
   }
-  public PutModelFromQuery(model: SimpleModel | string): Promise<SimpleModel> {
+  public PutModelFromQuery(model: string): Promise<SimpleModel> {
     return send({
       url: `/Simple/PutModelFromQuery`,
       method: 'PUT',
       params: { model },
-    });
-  }
-  public PutModelFromHeader(model: SimpleModel | string): Promise<SimpleModel> {
-    return send({
-      url: `/Simple/PutModelFromHeader`,
-      method: 'PUT',
-      headers: { model },
     });
   }
   public PutModelFromBody(model: SimpleModel): Promise<SimpleModel> {
@@ -447,7 +335,7 @@ class SimpleApi {
       body: model,
     });
   }
-  public PutModelFromForm(model: SimpleModel | string): Promise<SimpleModel> {
+  public PutModelFromForm(model: string): Promise<SimpleModel> {
     return send({
       url: `/Simple/PutModelFromForm`,
       method: 'PUT',
@@ -461,18 +349,11 @@ class SimpleApi {
       params: { model },
     });
   }
-  public DeleteModelFromQuery(model: SimpleModel | string): Promise<SimpleModel> {
+  public DeleteModelFromQuery(model: string): Promise<SimpleModel> {
     return send({
       url: `/Simple/DeleteModelFromQuery`,
       method: 'DELETE',
       params: { model },
-    });
-  }
-  public DeleteModelFromHeader(model: SimpleModel | string): Promise<SimpleModel> {
-    return send({
-      url: `/Simple/DeleteModelFromHeader`,
-      method: 'DELETE',
-      headers: { model },
     });
   }
   public DeleteModelFromBody(model: SimpleModel): Promise<SimpleModel> {
@@ -480,13 +361,6 @@ class SimpleApi {
       url: `/Simple/DeleteModelFromBody`,
       method: 'DELETE',
       body: model,
-    });
-  }
-  public DeleteModelFromForm(model: SimpleModel | string): Promise<SimpleModel> {
-    return send({
-      url: `/Simple/DeleteModelFromForm`,
-      method: 'DELETE',
-      forms: { model },
     });
   }
 }
@@ -500,35 +374,28 @@ class SimpleArrayApi {
     return send({
       url: `/SimpleArray/GetModelFromDefault`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnTask(model: SimpleModel[]): Promise<SimpleModel[]> {
     return send({
       url: `/SimpleArray/GetModelFromDefaultAndReturnTask`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnValueTask(model: SimpleModel[]): Promise<SimpleModel[]> {
     return send({
       url: `/SimpleArray/GetModelFromDefaultAndReturnValueTask`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
-  public GetModelFromQuery(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
+  public GetModelFromQuery(model: string[]): Promise<SimpleModel[]> {
     return send({
       url: `/SimpleArray/GetModelFromQuery`,
       method: 'GET',
       params: { model },
-    });
-  }
-  public GetModelFromHeader(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
-    return send({
-      url: `/SimpleArray/GetModelFromHeader`,
-      method: 'GET',
-      headers: { model },
     });
   }
   public GetModelFromBody(model: SimpleModel[]): Promise<SimpleModel[]> {
@@ -538,32 +405,18 @@ class SimpleArrayApi {
       body: model,
     });
   }
-  public GetModelFromForm(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
-    return send({
-      url: `/SimpleArray/GetModelFromForm`,
-      method: 'GET',
-      forms: { model },
-    });
-  }
   public PostModelFromDefault(model: SimpleModel[]): Promise<SimpleModel[]> {
     return send({
       url: `/SimpleArray/PostModelFromDefault`,
       method: 'POST',
-      body: model,
+      params: { model },
     });
   }
-  public PostModelFromQuery(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
+  public PostModelFromQuery(model: string[]): Promise<SimpleModel[]> {
     return send({
       url: `/SimpleArray/PostModelFromQuery`,
       method: 'POST',
       params: { model },
-    });
-  }
-  public PostModelFromHeader(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
-    return send({
-      url: `/SimpleArray/PostModelFromHeader`,
-      method: 'POST',
-      headers: { model },
     });
   }
   public PostModelFromBody(model: SimpleModel[]): Promise<SimpleModel[]> {
@@ -573,7 +426,7 @@ class SimpleArrayApi {
       body: model,
     });
   }
-  public PostModelFromForm(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
+  public PostModelFromForm(model: string[]): Promise<SimpleModel[]> {
     return send({
       url: `/SimpleArray/PostModelFromForm`,
       method: 'POST',
@@ -584,21 +437,14 @@ class SimpleArrayApi {
     return send({
       url: `/SimpleArray/PutModelFromDefault`,
       method: 'PUT',
-      body: model,
+      params: { model },
     });
   }
-  public PutModelFromQuery(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
+  public PutModelFromQuery(model: string[]): Promise<SimpleModel[]> {
     return send({
       url: `/SimpleArray/PutModelFromQuery`,
       method: 'PUT',
       params: { model },
-    });
-  }
-  public PutModelFromHeader(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
-    return send({
-      url: `/SimpleArray/PutModelFromHeader`,
-      method: 'PUT',
-      headers: { model },
     });
   }
   public PutModelFromBody(model: SimpleModel[]): Promise<SimpleModel[]> {
@@ -608,7 +454,7 @@ class SimpleArrayApi {
       body: model,
     });
   }
-  public PutModelFromForm(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
+  public PutModelFromForm(model: string[]): Promise<SimpleModel[]> {
     return send({
       url: `/SimpleArray/PutModelFromForm`,
       method: 'PUT',
@@ -619,21 +465,14 @@ class SimpleArrayApi {
     return send({
       url: `/SimpleArray/DeleteModelFromDefault`,
       method: 'DELETE',
-      body: model,
+      params: { model },
     });
   }
-  public DeleteModelFromQuery(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
+  public DeleteModelFromQuery(model: string[]): Promise<SimpleModel[]> {
     return send({
       url: `/SimpleArray/DeleteModelFromQuery`,
       method: 'DELETE',
       params: { model },
-    });
-  }
-  public DeleteModelFromHeader(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
-    return send({
-      url: `/SimpleArray/DeleteModelFromHeader`,
-      method: 'DELETE',
-      headers: { model },
     });
   }
   public DeleteModelFromBody(model: SimpleModel[]): Promise<SimpleModel[]> {
@@ -641,13 +480,6 @@ class SimpleArrayApi {
       url: `/SimpleArray/DeleteModelFromBody`,
       method: 'DELETE',
       body: model,
-    });
-  }
-  public DeleteModelFromForm(model: Array<SimpleModel | string>): Promise<SimpleModel[]> {
-    return send({
-      url: `/SimpleArray/DeleteModelFromForm`,
-      method: 'DELETE',
-      forms: { model },
     });
   }
 }
@@ -685,25 +517,11 @@ class DateTimeApi {
       params: { model },
     });
   }
-  public GetModelFromHeader(model: string): Promise<string> {
-    return send({
-      url: `/DateTime/GetModelFromHeader`,
-      method: 'GET',
-      headers: { model },
-    });
-  }
   public GetModelFromBody(model: string): Promise<string> {
     return send({
       url: `/DateTime/GetModelFromBody`,
       method: 'GET',
       body: model,
-    });
-  }
-  public GetModelFromForm(model: string): Promise<string> {
-    return send({
-      url: `/DateTime/GetModelFromForm`,
-      method: 'GET',
-      forms: { model },
     });
   }
   public PostModelFromDefault(model: string): Promise<string> {
@@ -718,13 +536,6 @@ class DateTimeApi {
       url: `/DateTime/PostModelFromQuery`,
       method: 'POST',
       params: { model },
-    });
-  }
-  public PostModelFromHeader(model: string): Promise<string> {
-    return send({
-      url: `/DateTime/PostModelFromHeader`,
-      method: 'POST',
-      headers: { model },
     });
   }
   public PostModelFromBody(model: string): Promise<string> {
@@ -755,13 +566,6 @@ class DateTimeApi {
       params: { model },
     });
   }
-  public PutModelFromHeader(model: string): Promise<string> {
-    return send({
-      url: `/DateTime/PutModelFromHeader`,
-      method: 'PUT',
-      headers: { model },
-    });
-  }
   public PutModelFromBody(model: string): Promise<string> {
     return send({
       url: `/DateTime/PutModelFromBody`,
@@ -790,25 +594,11 @@ class DateTimeApi {
       params: { model },
     });
   }
-  public DeleteModelFromHeader(model: string): Promise<string> {
-    return send({
-      url: `/DateTime/DeleteModelFromHeader`,
-      method: 'DELETE',
-      headers: { model },
-    });
-  }
   public DeleteModelFromBody(model: string): Promise<string> {
     return send({
       url: `/DateTime/DeleteModelFromBody`,
       method: 'DELETE',
       body: model,
-    });
-  }
-  public DeleteModelFromForm(model: string): Promise<string> {
-    return send({
-      url: `/DateTime/DeleteModelFromForm`,
-      method: 'DELETE',
-      forms: { model },
     });
   }
 }
@@ -846,25 +636,11 @@ class IntApi {
       params: { model },
     });
   }
-  public GetModelFromHeader(model: number): Promise<number> {
-    return send({
-      url: `/Int/GetModelFromHeader`,
-      method: 'GET',
-      headers: { model },
-    });
-  }
   public GetModelFromBody(model: number): Promise<number> {
     return send({
       url: `/Int/GetModelFromBody`,
       method: 'GET',
       body: model,
-    });
-  }
-  public GetModelFromForm(model: number): Promise<number> {
-    return send({
-      url: `/Int/GetModelFromForm`,
-      method: 'GET',
-      forms: { model },
     });
   }
   public PostModelFromDefault(model: number): Promise<number> {
@@ -879,13 +655,6 @@ class IntApi {
       url: `/Int/PostModelFromQuery`,
       method: 'POST',
       params: { model },
-    });
-  }
-  public PostModelFromHeader(model: number): Promise<number> {
-    return send({
-      url: `/Int/PostModelFromHeader`,
-      method: 'POST',
-      headers: { model },
     });
   }
   public PostModelFromBody(model: number): Promise<number> {
@@ -916,13 +685,6 @@ class IntApi {
       params: { model },
     });
   }
-  public PutModelFromHeader(model: number): Promise<number> {
-    return send({
-      url: `/Int/PutModelFromHeader`,
-      method: 'PUT',
-      headers: { model },
-    });
-  }
   public PutModelFromBody(model: number): Promise<number> {
     return send({
       url: `/Int/PutModelFromBody`,
@@ -951,25 +713,11 @@ class IntApi {
       params: { model },
     });
   }
-  public DeleteModelFromHeader(model: number): Promise<number> {
-    return send({
-      url: `/Int/DeleteModelFromHeader`,
-      method: 'DELETE',
-      headers: { model },
-    });
-  }
   public DeleteModelFromBody(model: number): Promise<number> {
     return send({
       url: `/Int/DeleteModelFromBody`,
       method: 'DELETE',
       body: model,
-    });
-  }
-  public DeleteModelFromForm(model: number): Promise<number> {
-    return send({
-      url: `/Int/DeleteModelFromForm`,
-      method: 'DELETE',
-      forms: { model },
     });
   }
 }
@@ -983,35 +731,28 @@ class IntArrayApi {
     return send({
       url: `/IntArray/GetModelFromDefault`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnTask(model: number[]): Promise<number[]> {
     return send({
       url: `/IntArray/GetModelFromDefaultAndReturnTask`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnValueTask(model: number[]): Promise<number[]> {
     return send({
       url: `/IntArray/GetModelFromDefaultAndReturnValueTask`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
-  public GetModelFromQuery(model: Array<number>): Promise<number[]> {
+  public GetModelFromQuery(model: number[]): Promise<number[]> {
     return send({
       url: `/IntArray/GetModelFromQuery`,
       method: 'GET',
       params: { model },
-    });
-  }
-  public GetModelFromHeader(model: Array<number>): Promise<number[]> {
-    return send({
-      url: `/IntArray/GetModelFromHeader`,
-      method: 'GET',
-      headers: { model },
     });
   }
   public GetModelFromBody(model: number[]): Promise<number[]> {
@@ -1021,32 +762,18 @@ class IntArrayApi {
       body: model,
     });
   }
-  public GetModelFromForm(model: Array<number>): Promise<number[]> {
-    return send({
-      url: `/IntArray/GetModelFromForm`,
-      method: 'GET',
-      forms: { model },
-    });
-  }
   public PostModelFromDefault(model: number[]): Promise<number[]> {
     return send({
       url: `/IntArray/PostModelFromDefault`,
       method: 'POST',
-      body: model,
+      params: { model },
     });
   }
-  public PostModelFromQuery(model: Array<number>): Promise<number[]> {
+  public PostModelFromQuery(model: number[]): Promise<number[]> {
     return send({
       url: `/IntArray/PostModelFromQuery`,
       method: 'POST',
       params: { model },
-    });
-  }
-  public PostModelFromHeader(model: Array<number>): Promise<number[]> {
-    return send({
-      url: `/IntArray/PostModelFromHeader`,
-      method: 'POST',
-      headers: { model },
     });
   }
   public PostModelFromBody(model: number[]): Promise<number[]> {
@@ -1056,7 +783,7 @@ class IntArrayApi {
       body: model,
     });
   }
-  public PostModelFromForm(model: Array<number>): Promise<number[]> {
+  public PostModelFromForm(model: number[]): Promise<number[]> {
     return send({
       url: `/IntArray/PostModelFromForm`,
       method: 'POST',
@@ -1067,21 +794,14 @@ class IntArrayApi {
     return send({
       url: `/IntArray/PutModelFromDefault`,
       method: 'PUT',
-      body: model,
+      params: { model },
     });
   }
-  public PutModelFromQuery(model: Array<number>): Promise<number[]> {
+  public PutModelFromQuery(model: number[]): Promise<number[]> {
     return send({
       url: `/IntArray/PutModelFromQuery`,
       method: 'PUT',
       params: { model },
-    });
-  }
-  public PutModelFromHeader(model: Array<number>): Promise<number[]> {
-    return send({
-      url: `/IntArray/PutModelFromHeader`,
-      method: 'PUT',
-      headers: { model },
     });
   }
   public PutModelFromBody(model: number[]): Promise<number[]> {
@@ -1091,7 +811,7 @@ class IntArrayApi {
       body: model,
     });
   }
-  public PutModelFromForm(model: Array<number>): Promise<number[]> {
+  public PutModelFromForm(model: number[]): Promise<number[]> {
     return send({
       url: `/IntArray/PutModelFromForm`,
       method: 'PUT',
@@ -1102,21 +822,14 @@ class IntArrayApi {
     return send({
       url: `/IntArray/DeleteModelFromDefault`,
       method: 'DELETE',
-      body: model,
+      params: { model },
     });
   }
-  public DeleteModelFromQuery(model: Array<number>): Promise<number[]> {
+  public DeleteModelFromQuery(model: number[]): Promise<number[]> {
     return send({
       url: `/IntArray/DeleteModelFromQuery`,
       method: 'DELETE',
       params: { model },
-    });
-  }
-  public DeleteModelFromHeader(model: Array<number>): Promise<number[]> {
-    return send({
-      url: `/IntArray/DeleteModelFromHeader`,
-      method: 'DELETE',
-      headers: { model },
     });
   }
   public DeleteModelFromBody(model: number[]): Promise<number[]> {
@@ -1124,13 +837,6 @@ class IntArrayApi {
       url: `/IntArray/DeleteModelFromBody`,
       method: 'DELETE',
       body: model,
-    });
-  }
-  public DeleteModelFromForm(model: Array<number>): Promise<number[]> {
-    return send({
-      url: `/IntArray/DeleteModelFromForm`,
-      method: 'DELETE',
-      forms: { model },
     });
   }
 }
@@ -1168,25 +874,11 @@ class StringApi {
       params: { model },
     });
   }
-  public GetModelFromHeader(model: string): Promise<string> {
-    return send({
-      url: `/String/GetModelFromHeader`,
-      method: 'GET',
-      headers: { model },
-    });
-  }
   public GetModelFromBody(model: string): Promise<string> {
     return send({
       url: `/String/GetModelFromBody`,
       method: 'GET',
       body: model,
-    });
-  }
-  public GetModelFromForm(model: string): Promise<string> {
-    return send({
-      url: `/String/GetModelFromForm`,
-      method: 'GET',
-      forms: { model },
     });
   }
   public PostModelFromDefault(model: string): Promise<string> {
@@ -1201,13 +893,6 @@ class StringApi {
       url: `/String/PostModelFromQuery`,
       method: 'POST',
       params: { model },
-    });
-  }
-  public PostModelFromHeader(model: string): Promise<string> {
-    return send({
-      url: `/String/PostModelFromHeader`,
-      method: 'POST',
-      headers: { model },
     });
   }
   public PostModelFromBody(model: string): Promise<string> {
@@ -1238,13 +923,6 @@ class StringApi {
       params: { model },
     });
   }
-  public PutModelFromHeader(model: string): Promise<string> {
-    return send({
-      url: `/String/PutModelFromHeader`,
-      method: 'PUT',
-      headers: { model },
-    });
-  }
   public PutModelFromBody(model: string): Promise<string> {
     return send({
       url: `/String/PutModelFromBody`,
@@ -1273,25 +951,11 @@ class StringApi {
       params: { model },
     });
   }
-  public DeleteModelFromHeader(model: string): Promise<string> {
-    return send({
-      url: `/String/DeleteModelFromHeader`,
-      method: 'DELETE',
-      headers: { model },
-    });
-  }
   public DeleteModelFromBody(model: string): Promise<string> {
     return send({
       url: `/String/DeleteModelFromBody`,
       method: 'DELETE',
       body: model,
-    });
-  }
-  public DeleteModelFromForm(model: string): Promise<string> {
-    return send({
-      url: `/String/DeleteModelFromForm`,
-      method: 'DELETE',
-      forms: { model },
     });
   }
 }
@@ -1305,35 +969,28 @@ class StringArrayApi {
     return send({
       url: `/StringArray/GetModelFromDefault`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnTask(model: string[]): Promise<string[]> {
     return send({
       url: `/StringArray/GetModelFromDefaultAndReturnTask`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
   public GetModelFromDefaultAndReturnValueTask(model: string[]): Promise<string[]> {
     return send({
       url: `/StringArray/GetModelFromDefaultAndReturnValueTask`,
       method: 'GET',
-      body: model,
+      params: { model },
     });
   }
-  public GetModelFromQuery(model: Array<string>): Promise<string[]> {
+  public GetModelFromQuery(model: string[]): Promise<string[]> {
     return send({
       url: `/StringArray/GetModelFromQuery`,
       method: 'GET',
       params: { model },
-    });
-  }
-  public GetModelFromHeader(model: Array<string>): Promise<string[]> {
-    return send({
-      url: `/StringArray/GetModelFromHeader`,
-      method: 'GET',
-      headers: { model },
     });
   }
   public GetModelFromBody(model: string[]): Promise<string[]> {
@@ -1343,32 +1000,18 @@ class StringArrayApi {
       body: model,
     });
   }
-  public GetModelFromForm(model: Array<string>): Promise<string[]> {
-    return send({
-      url: `/StringArray/GetModelFromForm`,
-      method: 'GET',
-      forms: { model },
-    });
-  }
   public PostModelFromDefault(model: string[]): Promise<string[]> {
     return send({
       url: `/StringArray/PostModelFromDefault`,
       method: 'POST',
-      body: model,
+      params: { model },
     });
   }
-  public PostModelFromQuery(model: Array<string>): Promise<string[]> {
+  public PostModelFromQuery(model: string[]): Promise<string[]> {
     return send({
       url: `/StringArray/PostModelFromQuery`,
       method: 'POST',
       params: { model },
-    });
-  }
-  public PostModelFromHeader(model: Array<string>): Promise<string[]> {
-    return send({
-      url: `/StringArray/PostModelFromHeader`,
-      method: 'POST',
-      headers: { model },
     });
   }
   public PostModelFromBody(model: string[]): Promise<string[]> {
@@ -1378,7 +1021,7 @@ class StringArrayApi {
       body: model,
     });
   }
-  public PostModelFromForm(model: Array<string>): Promise<string[]> {
+  public PostModelFromForm(model: string[]): Promise<string[]> {
     return send({
       url: `/StringArray/PostModelFromForm`,
       method: 'POST',
@@ -1389,21 +1032,14 @@ class StringArrayApi {
     return send({
       url: `/StringArray/PutModelFromDefault`,
       method: 'PUT',
-      body: model,
+      params: { model },
     });
   }
-  public PutModelFromQuery(model: Array<string>): Promise<string[]> {
+  public PutModelFromQuery(model: string[]): Promise<string[]> {
     return send({
       url: `/StringArray/PutModelFromQuery`,
       method: 'PUT',
       params: { model },
-    });
-  }
-  public PutModelFromHeader(model: Array<string>): Promise<string[]> {
-    return send({
-      url: `/StringArray/PutModelFromHeader`,
-      method: 'PUT',
-      headers: { model },
     });
   }
   public PutModelFromBody(model: string[]): Promise<string[]> {
@@ -1413,7 +1049,7 @@ class StringArrayApi {
       body: model,
     });
   }
-  public PutModelFromForm(model: Array<string>): Promise<string[]> {
+  public PutModelFromForm(model: string[]): Promise<string[]> {
     return send({
       url: `/StringArray/PutModelFromForm`,
       method: 'PUT',
@@ -1424,21 +1060,14 @@ class StringArrayApi {
     return send({
       url: `/StringArray/DeleteModelFromDefault`,
       method: 'DELETE',
-      body: model,
+      params: { model },
     });
   }
-  public DeleteModelFromQuery(model: Array<string>): Promise<string[]> {
+  public DeleteModelFromQuery(model: string[]): Promise<string[]> {
     return send({
       url: `/StringArray/DeleteModelFromQuery`,
       method: 'DELETE',
       params: { model },
-    });
-  }
-  public DeleteModelFromHeader(model: Array<string>): Promise<string[]> {
-    return send({
-      url: `/StringArray/DeleteModelFromHeader`,
-      method: 'DELETE',
-      headers: { model },
     });
   }
   public DeleteModelFromBody(model: string[]): Promise<string[]> {
@@ -1448,51 +1077,282 @@ class StringArrayApi {
       body: model,
     });
   }
-  public DeleteModelFromForm(model: Array<string>): Promise<string[]> {
-    return send({
-      url: `/StringArray/DeleteModelFromForm`,
-      method: 'DELETE',
-      forms: { model },
-    });
-  }
 }
 
 export const stringArrayApi = new StringArrayApi();
 
 
-class BodyApi {
+class TimeSpanApi {
+
+  public GetModelFromDefault(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/GetModelFromDefault`,
+      method: 'GET',
+      params: { model },
+    });
+  }
+  public GetModelFromDefaultAndReturnTask(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/GetModelFromDefaultAndReturnTask`,
+      method: 'GET',
+      params: { model },
+    });
+  }
+  public GetModelFromDefaultAndReturnValueTask(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/GetModelFromDefaultAndReturnValueTask`,
+      method: 'GET',
+      params: { model },
+    });
+  }
+  public GetModelFromQuery(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/GetModelFromQuery`,
+      method: 'GET',
+      params: { model },
+    });
+  }
+  public GetModelFromBody(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/GetModelFromBody`,
+      method: 'GET',
+      body: model,
+    });
+  }
+  public PostModelFromDefault(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/PostModelFromDefault`,
+      method: 'POST',
+      params: { model },
+    });
+  }
+  public PostModelFromQuery(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/PostModelFromQuery`,
+      method: 'POST',
+      params: { model },
+    });
+  }
+  public PostModelFromBody(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/PostModelFromBody`,
+      method: 'POST',
+      body: model,
+    });
+  }
+  public PostModelFromForm(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/PostModelFromForm`,
+      method: 'POST',
+      forms: { model },
+    });
+  }
+  public PutModelFromDefault(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/PutModelFromDefault`,
+      method: 'PUT',
+      params: { model },
+    });
+  }
+  public PutModelFromQuery(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/PutModelFromQuery`,
+      method: 'PUT',
+      params: { model },
+    });
+  }
+  public PutModelFromBody(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/PutModelFromBody`,
+      method: 'PUT',
+      body: model,
+    });
+  }
+  public PutModelFromForm(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/PutModelFromForm`,
+      method: 'PUT',
+      forms: { model },
+    });
+  }
+  public DeleteModelFromDefault(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/DeleteModelFromDefault`,
+      method: 'DELETE',
+      params: { model },
+    });
+  }
+  public DeleteModelFromQuery(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/DeleteModelFromQuery`,
+      method: 'DELETE',
+      params: { model },
+    });
+  }
+  public DeleteModelFromBody(model: string): Promise<string> {
+    return send({
+      url: `/TimeSpan/DeleteModelFromBody`,
+      method: 'DELETE',
+      body: model,
+    });
+  }
+}
+
+export const timeSpanApi = new TimeSpanApi();
+
+
+class TimeSpanArrayApi {
+
+  public GetModelFromDefault(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/GetModelFromDefault`,
+      method: 'GET',
+      params: { model },
+    });
+  }
+  public GetModelFromDefaultAndReturnTask(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/GetModelFromDefaultAndReturnTask`,
+      method: 'GET',
+      params: { model },
+    });
+  }
+  public GetModelFromDefaultAndReturnValueTask(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/GetModelFromDefaultAndReturnValueTask`,
+      method: 'GET',
+      params: { model },
+    });
+  }
+  public GetModelFromQuery(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/GetModelFromQuery`,
+      method: 'GET',
+      params: { model },
+    });
+  }
+  public GetModelFromBody(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/GetModelFromBody`,
+      method: 'GET',
+      body: model,
+    });
+  }
+  public PostModelFromDefault(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/PostModelFromDefault`,
+      method: 'POST',
+      params: { model },
+    });
+  }
+  public PostModelFromQuery(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/PostModelFromQuery`,
+      method: 'POST',
+      params: { model },
+    });
+  }
+  public PostModelFromBody(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/PostModelFromBody`,
+      method: 'POST',
+      body: model,
+    });
+  }
+  public PostModelFromForm(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/PostModelFromForm`,
+      method: 'POST',
+      forms: { model },
+    });
+  }
+  public PutModelFromDefault(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/PutModelFromDefault`,
+      method: 'PUT',
+      params: { model },
+    });
+  }
+  public PutModelFromQuery(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/PutModelFromQuery`,
+      method: 'PUT',
+      params: { model },
+    });
+  }
+  public PutModelFromBody(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/PutModelFromBody`,
+      method: 'PUT',
+      body: model,
+    });
+  }
+  public PutModelFromForm(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/PutModelFromForm`,
+      method: 'PUT',
+      forms: { model },
+    });
+  }
+  public DeleteModelFromDefault(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/DeleteModelFromDefault`,
+      method: 'DELETE',
+      params: { model },
+    });
+  }
+  public DeleteModelFromQuery(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/DeleteModelFromQuery`,
+      method: 'DELETE',
+      params: { model },
+    });
+  }
+  public DeleteModelFromBody(model: string[]): Promise<string[]> {
+    return send({
+      url: `/TimeSpanArray/DeleteModelFromBody`,
+      method: 'DELETE',
+      body: model,
+    });
+  }
+}
+
+export const timeSpanArrayApi = new TimeSpanArrayApi();
+
+
+class IntBodyApi {
 
   public GetBody(model: number): Promise<number> {
     return send({
-      url: `/Body/GetBody`,
+      url: `/IntBody/GetBody`,
       method: 'GET',
       body: model,
     });
   }
   public PostBody(model: number): Promise<number> {
     return send({
-      url: `/Body/PostBody`,
+      url: `/IntBody/PostBody`,
       method: 'POST',
       body: model,
     });
   }
   public PutBody(model: number): Promise<number> {
     return send({
-      url: `/Body/PutBody`,
+      url: `/IntBody/PutBody`,
       method: 'PUT',
       body: model,
     });
   }
   public DeleteBody(model: number): Promise<number> {
     return send({
-      url: `/Body/DeleteBody`,
+      url: `/IntBody/DeleteBody`,
       method: 'DELETE',
       body: model,
     });
   }
 }
 
-export const bodyApi = new BodyApi();
+export const intBodyApi = new IntBodyApi();
 
 
 class StringArrayBodyApi {
@@ -1609,21 +1469,21 @@ class HeaderApi {
       headers: { a, b },
     });
   }
-  public SumArray(a: Array<number>, b: Array<number>): Promise<number> {
+  public SumArray(a: number[], b: number[]): Promise<number> {
     return send({
       url: `/Header/SumArray`,
       method: 'GET',
       headers: { a, b },
     });
   }
-  public SumArrayObject(a: Array<SimpleModel | string>, b: Array<SimpleModel | string>): Promise<number> {
+  public SumArrayObject(a: string[], b: string[]): Promise<number> {
     return send({
       url: `/Header/SumArrayObject`,
       method: 'GET',
       headers: { a, b },
     });
   }
-  public SumWithObject(a: number, b: number, simple: SimpleModel | string): Promise<number> {
+  public SumWithObject(a: number, b: number, simple: string): Promise<number> {
     return send({
       url: `/Header/SumWithObject`,
       method: 'GET',
@@ -1644,11 +1504,11 @@ class QueryApi {
       params: { a, b },
     });
   }
-  public SumWithObject(a: number, b: number, complex: ComplexObject, simple: SimpleModel | string): Promise<number> {
+  public SumWithObject(a: number, b: number, complex: ComplexObject, simple: string): Promise<number> {
     return send({
       url: `/Query/SumWithObject`,
       method: 'GET',
-      params: { a, b, ...complex, simple },
+      params: { a, b, complex, simple },
     });
   }
 }
@@ -1664,7 +1524,7 @@ class RouteApi {
       method: 'GET',
     });
   }
-  public SumWithObject(a: number, b: number, simple: SimpleModel | string): Promise<number> {
+  public SumWithObject(a: number, b: number, simple: string): Promise<number> {
     return send({
       url: `/Route/SumWithObject/${a}/${b}/${simple}`,
       method: 'GET',

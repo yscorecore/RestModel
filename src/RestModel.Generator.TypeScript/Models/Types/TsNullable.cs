@@ -20,7 +20,7 @@ namespace RestModel.Generator.TypeScript.Models.Types
 
         public string GetDisplayName(TsConvertOptions options, TsTypeDisplayFormat displayFormat = TsTypeDisplayFormat.Default)
         {
-            return $"{this.ItemType.GetDisplayName(options, displayFormat)} | null";
+            return $"{this.ItemType.GetDisplayName(options)} | null";
         }
 
         public void InitType(TsConvertContext tsConvert, Type clrType)

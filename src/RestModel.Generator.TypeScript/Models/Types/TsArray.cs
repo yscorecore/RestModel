@@ -35,7 +35,14 @@
             }
             else
             {
-                return $"Array<{this.ItemType.GetDisplayName(options, displayFormat)}>";
+                if (displayFormat.HasFlag(TsTypeDisplayFormat.WithNull))
+                {
+                    return $"Array<{this.ItemType.GetDisplayName(options, displayFormat)}> | null";
+                }
+                else
+                { 
+                    return $"Array<{this.ItemType.GetDisplayName(options, displayFormat)}>";
+                }
             }
         }
 

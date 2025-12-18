@@ -27,6 +27,8 @@ namespace RestModel.Generator.TypeScript
             }
 
             return ts.GetAllMapping();
+           
+
         }
         private async Task GenerateImport(StreamWriter streamWriter, GeneratorCodeContext<TsConvertOptions> context, IDictionary<Type, ITsType> modelTypeMapper)
         {

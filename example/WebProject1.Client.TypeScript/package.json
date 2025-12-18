@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "fetch": "download http://localhost:5077/rest-model/ts?SendFunctionImportModelName=../base > src/client/api.ts"
+    "fetch": "download http://localhost:5077/rest-model/ts?SendFunctionImportModelName=../base > src/client/api.ts",
+    "fetchTest": "download http://localhost:5077/rest-model/ts?SendFunctionImportModelName=../base > test/test.ts"
   },
   "author": "",
   "license": "ISC",

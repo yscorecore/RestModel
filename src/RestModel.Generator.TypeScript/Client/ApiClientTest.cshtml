@@ -1,0 +1,17 @@
+﻿@model RestModel.Generator.TypeScript.Client.ApiClient.Model
+
+
+
+
+describe("@(Model.ClassCamelCaseName)", () => {
+   const input: ComplexObject = xxx;
+   const expected: ComplexObject = xxx;
+   @foreach (var item in Model.ApiInfos)
+{
+@:      test("@(item.ActionInfo.ActionName)", async () => {
+@:      let res = await @(Model.ClassCamelCaseName).@(item.ActionInfo.ActionName)(input);
+@:      expect(res).toStrictEqual(expected);
+@:    })
+@:
+}   
+})
